@@ -1,6 +1,9 @@
+#include <utility> //pair
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <stack>
+#include <queue>
 #include <map>
 
 template <typename T>
