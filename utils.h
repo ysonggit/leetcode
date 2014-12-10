@@ -5,6 +5,7 @@
 #include <stack>
 #include <queue>
 #include <map>
+#include <string>
 
 template <typename T>
 void printVector(std::vector<T> v){
