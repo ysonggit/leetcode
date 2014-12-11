@@ -12,7 +12,13 @@ bool isPalindrome(string s){
     }
     return true;
 }
-    
+
+/*  find palindrome in s[0] and  find palindrome in s[1:end-1]
+    find palindrome in s[0:1] and  find palindrome in s[2:end-1]
+    ...
+    find palindrome in s[0:end-2] and  find palindrome in s[end-1]
+*/
+
 void dfs(vector<vector<string> > & results, vector<string> & sol, string s, int start_idx){
     if(start_idx == s.length()){
 	results.push_back(sol);
