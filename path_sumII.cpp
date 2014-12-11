@@ -18,7 +18,7 @@ int getSum(vector<int> v){
     }
     return sum;
 }
-
+// trick : parameter path should not be passed by reference
 void dfs(vector<vector<int> > & allpaths, TreeNode * root, vector<int> path, int sum){
     path.push_back(root->val);
 
