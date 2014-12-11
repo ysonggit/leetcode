@@ -2,7 +2,8 @@
 using namespace std;
 
 /*
-  
+   Newton's method
+   
  */
 
 double absval(double a){
