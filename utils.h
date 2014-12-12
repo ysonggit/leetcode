@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <sstream>
+#include <climits>
 
 template <typename T>
 void printVector(std::vector<T> v){

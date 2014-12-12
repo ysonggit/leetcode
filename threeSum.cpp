@@ -1,7 +1,4 @@
-
-#include <vector>
-#include <iostream>
-#include <algorithm>
+#include "utils.h"
 using namespace std;
 
 
@@ -40,22 +37,13 @@ vector<vector<int> > threeSum(vector<int> &num) {
     return results;
 }
 
-void showResults(const vector<vector<int> >& results){
-    for(vector<int> vs : results){
-	for(int s: vs){
-	    cout<<s<<" ";
-	}
-	cout<<endl;
-    }
-}
-
 int main(){
     vector<int> num(3,0);
     vector<vector<int> > res = threeSum(num);
-    showResults(res);
+    print2DVector(res);
     vector<int> num1({-1, 0, 1, 2, -1, -4});
     vector<vector<int> > res1 = threeSum(num1);
-    showResults(res1);
+    print2DVector(res1);
 
     return 0;
 }
