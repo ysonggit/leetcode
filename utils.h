@@ -30,3 +30,10 @@ struct TreeNode {
      TreeNode *right;
      
 };
+
+
+struct ListNode {
+ListNode(int x) : val(x), next(NULL) {}
+     int val;
+     ListNode *next;
+};
