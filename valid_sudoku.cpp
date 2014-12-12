@@ -64,7 +64,7 @@ bool test(vector<vector<char> > &board){
 }
 
 int main(){
-    char *a  = "....5..1..4.3..........3..18......2...2.7.....15...........2....2.9.......4......";
+    const char *a  = "....5..1..4.3..........3..18......2...2.7.....15...........2....2.9.......4......";
     vector<vector<char> > sudoku;
     for(int i=0; i<9; i++){
 	vector<char> row;

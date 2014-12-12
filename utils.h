@@ -4,7 +4,8 @@
 #include <algorithm>
 #include <stack>
 #include <queue>
-#include <map>
+#include <map>  // inserting takes O(logN)
+#include <unordered_map> // constant time operation O(1)
 #include <string>
 #include <sstream>
 #include <climits>
