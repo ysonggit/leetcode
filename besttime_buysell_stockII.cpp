@@ -5,7 +5,7 @@ using namespace std;
 /*
   greedy search for increasing sequence:
   if prices[i] > prices[i-1] , profit += prices_diff
-    
+
  */
 int maxProfit(vector<int> &prices) {
     int n = prices.size();

@@ -31,7 +31,6 @@ struct TreeNode {
      int val;
      TreeNode *left;
      TreeNode *right;
-     
 };
 
 
@@ -40,3 +39,12 @@ ListNode(int x) : val(x), next(NULL) {}
      int val;
      ListNode *next;
 };
+
+void printList(ListNode * head){
+    ListNode * cur = head;
+    while(cur!=NULL){
+        std::cout<<cur->val<<" -> ";
+        cur = cur->next;
+    }
+    std::cout<<"NULL"<<std::endl;
+}
