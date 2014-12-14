@@ -40,6 +40,15 @@ ListNode(int x) : val(x), next(NULL) {}
      ListNode *next;
 };
 
+void listInitializer(std::vector<ListNode * > & nodes, int vals[], int n){
+    for(int i=0; i<n; i++){
+        nodes.push_back(new ListNode(vals[i]));
+    }
+    for(int i=0; i<nodes.size()-1; i++){
+        nodes[i]->next = nodes[i+1];
+    }
+}
+
 void printList(ListNode * head){
     ListNode * cur = head;
     while(cur!=NULL){
