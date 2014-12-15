@@ -33,6 +33,23 @@ bool isMatch(const char *s, const char *p) {
     }
     return isMatch(s, p+2); // case s="aa", p=".*"
 }
+/*
+ TODO : DP solution:
+ have a bool matrix to save previous results
+ define M[i][j] : the i^th bit of s and the j^th bit of p match
+ 1. if p[j+1] is Not '*'
+    M[i+1][j+1] =  M[i][j] && s[i+1] == p[j+1]  
+ 2. if p[j+1] is '*'
+    if p[j] is NOT '.':
+          M[i+1][j+1] = M[i+1][j]                 s="aa"  p="a*"
+                        M[i+1][j-1]               s="aab" p="c*a*b"
+                        M[i][j+1] && s[i] == s[i-1] && s[i-1] = p[j-1] s="abbbc" p="ab*c"
+    if p[j] is '.':
+          M[i+1][j+1] = M[i+1][j] || M[i+1][j-1]  s="aa" p=".*"
+                                                  s="ab" p=".*"
+                                                  s="abcbcd" p="a.*c.*d"
+     
+ */
 
 void test(const char *s, const char *p, bool expectation){
     if(isMatch(s, p) == expectation){
