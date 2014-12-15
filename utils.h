@@ -41,6 +41,11 @@ ListNode(int x) : val(x), next(NULL) {}
 };
 
 template<typename T, int N>
+int getArrayLength(T (&A)[N]){
+    return sizeof(A)/sizeof(*A); 
+}
+
+template<typename T, int N>
 void listInitializer(std::vector<ListNode * > & nodes, T (&vals)[N]){
     for(int i=0; i<N; i++){
         nodes.push_back(new ListNode(vals[i]));
