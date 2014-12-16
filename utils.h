@@ -9,7 +9,7 @@
 #include <string>
 #include <sstream>
 #include <climits>
-
+#include <cstring> //strtok
 template <typename T>
 void printVector(std::vector<T> v){
    for(T i : v){
