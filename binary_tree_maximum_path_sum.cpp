@@ -1,5 +1,5 @@
 #include "utils.h"
-
+#include <list>
 using namespace std;
 /*
   For every node in given tree, math sum of paths can be obtained by 
@@ -11,9 +11,12 @@ using namespace std;
   subpath only contains node on either left or right side
  */
 
-int main(int argc, char *argv[])
-{
-    
+
+int main(int argc, char *argv[]){
+    string vals = "{1,2,3,#,#,4,#,#,5}";
+    vector<TreeNode*> nodes;
+    treeInitializer(nodes, vals);
+    printTree(nodes[0], 2);
     return 0;
 }
 
