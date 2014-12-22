@@ -63,6 +63,12 @@ TEST(Case, Two){
     ASSERT_EQ(res, firstMissingPositive(A, 4));
 }
 
+TEST(Case, Three){
+    int A[4] = {13, 11, 10, 8};
+    int res = 1;
+    ASSERT_EQ(res, firstMissingPositive(A, 4));
+}
+
 int main(int argc, char *argv[]){
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
