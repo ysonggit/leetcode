@@ -10,16 +10,16 @@ int lengthOfLongestSubstring(string s) {
     if(s.length()==0) return 0;
     int walker=0, runner=0;
     int max_len = 0;
-    unordered_map<char, int> count;
-    int n = s.length();
-    while( runner < n ){
-        char key = s[runner];
+    // unordered_map<char, int> count;
+    vector<int> count(256, 0); // there are 128 ASCii codes  and 128 extended ascii codes
+    while( runner < s.length() ){
+        int key = (int) s[runner];
         if(count[key]<1){
             count[key]++;
         }
         else{
             while(s[walker]!= s[runner]){
-                char key_to_reset = s[walker];
+                int key_to_reset = (int) s[walker];
                 count[key_to_reset] = 0;
                 walker++;
             }
