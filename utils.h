@@ -12,7 +12,7 @@
 #include <climits>
 #include <cstring> //strtok
 #include <iomanip>      //setw
-
+#include <set>
 
 template <typename T>
 void printVector(std::vector<T> v){
