@@ -70,3 +70,16 @@ std::vector<std::string> split(const std::string &s, char delim);
 void treeInitializer(std::vector<TreeNode *> & nodes, const std::string & vals);
 
 void printTree(TreeNode * root, int indent);
+
+/**********************************************
+              Interval Definition
+ *********************************************/
+
+struct Interval {
+    int start;
+    int end;
+    Interval() : start(0), end(0) {}
+    Interval(int s, int e) : start(s), end(e) {}
+};
+
+std::ostream & operator<<(std::ostream & lhs, const Interval & it);

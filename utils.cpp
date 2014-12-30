@@ -71,3 +71,8 @@ void printTree(TreeNode * root, int indent){
         printTree(root->left, indent+4);
     }
 }
+
+ostream & operator<<(ostream & lhs, const Interval & it){
+    lhs << "[" << it.start << ", " << it.end << "]\n";
+    return lhs;
+}
