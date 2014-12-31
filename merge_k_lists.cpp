@@ -3,10 +3,10 @@
 using namespace std;
 
 /*
+
   idea : divide and conquer
          every time merge two lists
          O(nklogk) time O(logk)
- */
 
 ListNode * merge2Lists(ListNode * l1, ListNode * l2){
     if(l1==nullptr && l2==nullptr) return nullptr;
@@ -23,6 +23,30 @@ ListNode * merge2Lists(ListNode * l1, ListNode * l2){
     return mergehead;
 }
 
+*/
+//  non-recursive version merge two lists, O(1) space
+//  take less time to execute
+ListNode * merge2Lists(ListNode* l1, ListNode* l2){
+    if(l1==nullptr && l2==nullptr) return nullptr;
+    ListNode * fakehead = new ListNode(-1);
+    ListNode * cur = fakehead;
+    ListNode * h1 = l1;
+    ListNode * h2 = l2;
+    while(h1!= nullptr && h2 != nullptr){
+        if(h1->val < h2->val){
+            cur->next = h1;
+            h1 = h1->next;
+        }else{
+            cur->next = h2;
+            h2 = h2->next;
+        }
+        cur = cur->next;
+    }
+    if(h1!=nullptr) cur->next = h1;
+    if(h2!=nullptr) cur->next = h2;
+    return fakehead->next;
+}
+
 ListNode * divideConquer(vector<ListNode*> & lists, int left, int right){
     if(left < right ){
         int mid =(left + right)/2;
@@ -36,7 +60,7 @@ ListNode * divideConquer(vector<ListNode*> & lists, int left, int right){
 ListNode *mergeKLists(vector<ListNode *> &lists) {
     if(lists.size()==0) return nullptr;
     return divideConquer(lists, 0, lists.size()-1);
-}
+} 
 
 int main(int argc, char *argv[]){
     vector<ListNode*> lists;
