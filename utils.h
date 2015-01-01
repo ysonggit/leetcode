@@ -1,4 +1,3 @@
-#include <queue>
 #include <utility> //pair
 #include <vector>
 #include <iostream>
@@ -84,3 +83,14 @@ struct Interval {
 };
 
 std::ostream & operator<<(std::ostream & lhs, const Interval & it);
+
+
+///////////////////////////////////////////////////////////
+//              Functions for Undirected Graph           //
+///////////////////////////////////////////////////////////
+
+struct UndirectedGraphNode {
+     int label;
+     vector<UndirectedGraphNode *> neighbors;
+     UndirectedGraphNode(int x) : label(x) {};
+};
