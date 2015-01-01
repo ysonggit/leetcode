@@ -54,7 +54,7 @@ bool isValidSudoku(vector<vector<char> > &board) {
     return true;
 }
 
-bool test(vector<vector<char> > &board){
+void test(vector<vector<char> > &board){
     if(isValidSudoku(board)){
 	cout<<"valid\n";
     }else{

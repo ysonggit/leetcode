@@ -24,7 +24,7 @@ int maximumGap(vector<int> & num){
     double delta = (double) (max_num - min_num)/(n-1); // BE CAREFULL! convert int to (double)
     // 3. fill buckets
     // use array instead of vector can speed up computations
-    Bucket buckets[n-1];  
+    Bucket *buckets = new Bucket[n-1];  
     for(int i=0; i<n; i++){
         if(num[i]!= max_num && num[i]!= min_num){
             int k = (int) floor((num[i]-min_num)/delta);
@@ -50,6 +50,7 @@ int maximumGap(vector<int> & num){
     for(int i=0; i<L.size()-1; i++){
         max_gap = max(max_gap, L[i+1] - L[i]);
     }
+    delete [] buckets;
     return max_gap;
 }
 
