@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 
 project(leetcode)
-
 #add_library()
 enable_testing()
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
-
+find_package(GTest)
+if(${GTest_FOUND})
+  include_directories(${GTEST_INCLUDE_DIRS})
+endif(${GTest_FOUND})
 set(CMAKE_CXX_FLAGS "-std=c++0x -g")
 
 file(GLOB CPP_FILES "*.cpp")
