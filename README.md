@@ -1,10 +1,38 @@
 leetcode solutions
 ========
+Note: CMake and google test library are required
 
-    1. mkdir build
+#### Install GTest on Mac/Linux:
 
-    2. cd build
+(1) Download gtest [gtest-1.7.0.zip](https://code.google.com/p/googletest/downloads/list) and unzip 
 
-    3. cmake ..
+(2) Build gtest:
+{% highlight bash %}
+cd gtest-1.7.0
 
-    4. make
+mkdir build
+
+cd build
+
+cmake ..
+
+make
+{% endhighlight %}
+
+(3) Install gtest library
+{% highlight bash %}
+sudo cp -r ../include/gtest /usr/local/include/
+
+sudo cp lib*.a /usr/local/lib
+{% endhighlight %}
+
+#### Compile using CMake
+{% highlight bash %}
+mkdir build
+
+cd build
+
+cmake ..
+    
+make
+{% endhighlight %}
