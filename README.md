@@ -8,16 +8,15 @@ Note: CMake and google test library are required
 
 (2) Build gtest:
 
-```cd gtest-1.7.0```
+```cd gtest-1.7.0
 
-```mkdir build```
+mkdir build
 
-```cd build```
+cd build
 
-```cmake ..```
+cmake .. 
 
-```make```
-
+make```
 
 (3) Install gtest library
 
