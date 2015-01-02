@@ -51,6 +51,7 @@ int maximumGap(vector<int> & num){
         max_gap = max(max_gap, L[i+1] - L[i]);
     }
     delete [] buckets;
+    buckets = NULL; // clear to prevent using invalid memory reference
     return max_gap;
 }
 

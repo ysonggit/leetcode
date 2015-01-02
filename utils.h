@@ -91,6 +91,6 @@ std::ostream & operator<<(std::ostream & lhs, const Interval & it);
 
 struct UndirectedGraphNode {
      int label;
-     vector<UndirectedGraphNode *> neighbors;
+    std::vector<UndirectedGraphNode *> neighbors;
      UndirectedGraphNode(int x) : label(x) {};
 };
