@@ -7,32 +7,32 @@ Note: CMake and google test library are required
 (1) Download gtest [gtest-1.7.0.zip](https://code.google.com/p/googletest/downloads/list) and unzip 
 
 (2) Build gtest:
-{% highlight bash %}
-cd gtest-1.7.0
 
-mkdir build
+```cd gtest-1.7.0```
 
-cd build
+```mkdir build```
 
-cmake ..
+```cd build```
 
-make
-{% endhighlight %}
+```cmake ..```
+
+```make```
+
 
 (3) Install gtest library
-{% highlight bash %}
-sudo cp -r ../include/gtest /usr/local/include/
 
-sudo cp lib*.a /usr/local/lib
-{% endhighlight %}
+```sudo cp -r ../include/gtest /usr/local/include/```
+
+```sudo cp lib*.a /usr/local/lib```
+
 
 #### Compile using CMake
-{% highlight bash %}
-mkdir build
 
-cd build
+```mkdir build```
 
-cmake ..
+```cd build```
+
+```cmake ..```
     
-make
-{% endhighlight %}
+```make```
+
