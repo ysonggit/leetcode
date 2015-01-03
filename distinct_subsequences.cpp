@@ -5,13 +5,14 @@ using namespace std;
 
 /* DP: let D[i][j] be the number of distinct subsequences start from 0 to i in s
                                 that matches the substring start form 0 to j in t
-                                i>=j
-   D[i][j] = D[i-1][j] + D[i-1][j-1]   s[i] == t[j]
+
+   D[i][j] = D[i-1][j] + D[i-1][j-1]   s[i] == t[j] 
            = D[i-1][j]                 s[i] != t[j]
 
-   s = "ada"
-   t = "a"
-   question: how about t is empty?   
+   for example: s="abbdd", t="bd"
+   since s[4]==t[1] D[4][1] = D[3][1] + D[3][0]
+   means "abbd" already contains "bd" or "abbdd" still contains "bd"
+   question: how about t is empty?
  */
 
 int numDistinct(string S, string T) {
@@ -21,7 +22,7 @@ int numDistinct(string S, string T) {
     for(int j=0; j<=n; j++){
         D[0][j] = 0;
     }
-    // tricky: initialization :
+    // tricky initialization :
     // in each row the first element should be initialized as 1
     // so that when s[1] == t[1],D[1][1] = 1...
     for(int i=0; i<=m; i++){
