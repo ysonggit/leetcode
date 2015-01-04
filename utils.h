@@ -55,6 +55,14 @@ template<typename T, int N>
 
 void printList(ListNode * head);
 
+struct RandomListNode {
+    int label;
+    RandomListNode *next, *random;
+    RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
+};
+
+void printRandomList(RandomListNode * head);
+
 ///////////////////////////////////////////////////////////
 //              Functions for Binary Tree                //
 ///////////////////////////////////////////////////////////

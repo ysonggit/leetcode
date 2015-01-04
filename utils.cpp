@@ -12,6 +12,34 @@ void printList(ListNode * head){
     }
     std::cout<<"NULL"<<std::endl;
 }
+
+void printRandomList(RandomListNode * head){
+    RandomListNode * cur = head;
+    // first traversal: print next
+    while(cur!=NULL){
+        std::cout<<"("<<cur->label<<")  -> ";
+        cur = cur->next;
+    }
+    std::cout<<"NULL"<<std::endl;
+    // second/third traversal: print  random
+    cur = head;
+    while(cur!=NULL){
+        std::cout<<" | \t";
+        cur = cur->next;
+    }
+    std::cout<<"\n";
+    cur = head;
+    while(cur!=NULL){
+        if(cur->random != nullptr){
+            std::cout<<"("<<cur->random->label<<")\t";
+        }else{
+            std::cout<<"( )\t";
+        }
+        cur = cur->next;
+    }
+    std::cout<<"\n";
+}
+
 ///////////////////////////////////////////////////////////
 //              Functions for Binary Tree                //
 ///////////////////////////////////////////////////////////
