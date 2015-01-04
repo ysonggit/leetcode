@@ -3,15 +3,6 @@ using namespace std;
 
 /*
   for every two nodes, swap pairs
-  trick : swap values of nodes but not pointers
- */
-
-void swapNodes(ListNode * n1, ListNode * n2){
-    if(n1==NULL || n2 == NULL) return ;
-    int v1 = n1->val;
-    n1->val = n2->val;
-    n2->val = v1;
-}
 
 ListNode *swapPairs(ListNode *head) {
     // tip : add a dummy head
@@ -19,12 +10,35 @@ ListNode *swapPairs(ListNode *head) {
     fakehead->next  = head;
     ListNode * cur = head;
     while(cur != NULL && cur->next != NULL){
-        swapNodes(cur, cur->next);
+        swap(cur->val, cur->next->val);
         cur= cur->next->next;
     }
     return fakehead->next;
+    }*/
+
+// pre -> cur -> curnex -> curnex.next
+// pre -> curnex -> cur -> curnex.next
+void swapNodes(ListNode * pre, ListNode * cur, ListNode * curnex){
+    cur->next = curnex->next;
+    curnex->next = cur;
+    pre->next = curnex;
 }
 
+ListNode *swapPairs(ListNode *head) {
+    // tip : add a dummy head
+    ListNode * fakehead = new ListNode(-1);
+    fakehead->next  = head;
+    ListNode * cur = head;
+    ListNode * pre = fakehead;
+    while(pre != NULL && cur != NULL && cur->next != NULL){
+        // save copy of cur->next->next
+        ListNode * nexnex = cur->next->next;
+        swapNodes(pre, cur, cur->next);
+        pre = cur;
+        cur= nexnex;
+    }
+    return fakehead->next;
+}
 
 int  main(int argc, char *argv[]){
     ListNode * n1 = new ListNode(1);
