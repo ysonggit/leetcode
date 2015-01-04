@@ -18,10 +18,27 @@ void dfs(map<int, UndirectedGraphNode*> & cloned, UndirectedGraphNode * node){
     }
 }
 
+void bfs(map<int, UndirectedGraphNode*> & cloned, UndirectedGraphNode * node){
+    queue<UndirectedGraphNode*> q;
+    cloned[node->label] = new UndirectedGraphNode(node->label);
+    q.push(node);
+    while(!q.empty()){
+        UndirectedGraphNode * cur = q.front();
+        q.pop();
+        for(UndirectedGraphNode * adj : cur->neighbors){
+            if(cloned.find(adj->label)==cloned.end()){
+                cloned[adj->label] = new UndirectedGraphNode(adj->label);
+                q.push(adj);
+            }
+            cloned[cur->label]->neighbors.push_back(cloned[adj->label]);
+        }
+    }
+}
+
 UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
     if(node==nullptr) return node;
     map<int, UndirectedGraphNode*> cloned;
-    dfs(cloned, node);
+    bfs(cloned, node);
     return cloned.begin()->second;
 }
 
