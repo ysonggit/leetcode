@@ -76,3 +76,70 @@ ostream & operator<<(ostream & lhs, const Interval & it){
     lhs << "[" << it.start << ", " << it.end << "]\n";
     return lhs;
 }
+
+
+/*
+  the representation of an undirected graph is given as "{0,1,2#1,2#2,2}"
+ */
+std::map<int, UndirectedGraphNode*> graphInitializer(const std::string & vals){
+    std::map<int, UndirectedGraphNode*> nodes; // key is the label
+    //1. pass by left & right brackets {}
+    std::size_t left_idx = vals.find("{");
+    std::size_t right_idx = vals.find("}"); // indices of {}
+    // truncate the original string by copying only values
+    std::string values = vals.substr(left_idx+1, right_idx-left_idx-1);
+    if(values.length()==0) return nodes;
+    //2. split by #
+    std::vector<std::string> segments = split(values, '#');
+    //3. for each splitted segment, the first one is the node 
+    //                              others are labels of its neighbors
+    for(int i=0; i<segments.size(); i++){
+        // 3.1 obtain all labels by removing comma's
+        std::vector<std::string> labels = split(segments[i], ',');
+        if(labels.empty()) continue; // jump to next iteration
+        int host_label = std::stoi(labels[0]);
+        if(nodes.find(host_label) == nodes.end()) {
+            UndirectedGraphNode * host = new UndirectedGraphNode(host_label);
+            nodes[host_label] = host;
+        }
+        for(int j=1; j<labels.size(); j++){
+            int neighbor_label = std::stoi(labels[j]);
+            if(nodes.find(neighbor_label) == nodes.end()){
+                UndirectedGraphNode * neighbor = new UndirectedGraphNode(neighbor_label);
+                nodes[neighbor_label] = neighbor;
+            }
+            nodes[host_label]->neighbors.push_back(nodes[neighbor_label]);
+        }
+    }
+    return nodes;
+}
+
+void printGraphNode(UndirectedGraphNode * node){
+    std::cout<<"("<<node->label<<")\n";
+    for(UndirectedGraphNode * n : node->neighbors){
+        std::cout<<" |\n";
+        std::cout<<" -- ("<<n->label<<")\n";
+    }
+    std::cout<<std::endl;
+}
+
+// BFS traversal
+void printGraph(UndirectedGraphNode * node){
+    std::queue<UndirectedGraphNode *> q;
+    std::set<UndirectedGraphNode*> visited;
+    q.push(node);
+    visited.insert(node);
+    while(!q.empty()){
+        UndirectedGraphNode * cur = q.front();
+        printGraphNode(cur);
+        q.pop();
+        // get all adjacent neighbors of current node, if an adjacent is not visited
+        // then mark it visited and enqueue
+        for(UndirectedGraphNode * adj : cur->neighbors){
+            if(visited.find(adj) == visited.end()){
+                visited.insert(adj);
+                q.push(adj);
+            }
+        }
+    }
+}

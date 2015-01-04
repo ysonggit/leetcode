@@ -90,7 +90,17 @@ std::ostream & operator<<(std::ostream & lhs, const Interval & it);
 ///////////////////////////////////////////////////////////
 
 struct UndirectedGraphNode {
-     int label;
+    int label;
     std::vector<UndirectedGraphNode *> neighbors;
-     UndirectedGraphNode(int x) : label(x) {};
+    UndirectedGraphNode(int x) : label(x) {};
 };
+
+std::map<int, UndirectedGraphNode*> graphInitializer(const std::string & vals);
+
+void printGraphNode(UndirectedGraphNode * node);
+
+void printGraph(UndirectedGraphNode * node);
+
+
+
+
