@@ -5,13 +5,15 @@ using namespace std;
 
 /*
   idea: move a sliding window represented as two pointers
-        presteps: establish a dict (hashmap) of characters in T,
-                  key is the char, and value is the shown times in S
-                  initially , values are all 0s
-  1. first move back pointer, count the frequency of each T'char shown in S
-  2. if any one char in the dict showns 0 times, return ""
-  3. move front pointer while deducing the count in the dict, until the dict[S[front]] is equal to destdict[]
-     record the current substring
+        presteps: create a desired dict (hashmap) of characters in T,
+                  key is the char, and value is the shown times in T
+                  create an actual_dict of chars in S
+     setup a variable to count how many chars of T have been visited in S
+  1. first move back pointer, if current char is contained in T, update actual_dict's value
+                update counter only if the actual_dict's value <= dest dict's value
+  2. if the count == T's length
+        move front pointer while deduct corresponding value in actual dict, until the actual_dict[S[front]] is equal to destdict[S[front]]
+        record current minimum length and save current front pointer
   4. return step 1 until to the tail of S
   Question : how about T contains duplicated characters?
   answer: use two dicts : dest dict and actual dict 
