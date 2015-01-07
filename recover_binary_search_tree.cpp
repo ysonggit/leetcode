@@ -22,7 +22,7 @@ using namespace std;
             Rule: the 1st num used for swap is always the first element in wrong order
                   the 2nd num used for swap is the last element in the last wrong order
                
-     Morris Inorder Traversal
+     Morris Inorder Traversal O(1) space
         1. Initialize current as root 
         2. While current is not NULL
             If current does not have left child
@@ -48,33 +48,37 @@ TreeNode * inorderPredecessor(TreeNode * root, TreeNode * cur){
     return inorderPredecessor(root->right, cur);
 }
 
+void getSwappedNodes(TreeNode * pre, TreeNode * cur, map<int, TreeNode *> & swapped, int & count){
+    if(count==0){
+        if(cur->right !=NULL && cur->val > cur->right->val){
+            swapped[1] = cur;
+            count++;
+        }
+        if(pre!= NULL && cur->val < pre->val){
+            swapped[1] = pre;
+            count++;
+        }
+    }
+    if(count>0){
+        if(cur->right !=NULL && cur->val > cur->right->val){
+            swapped[2] = cur->right;
+            count++;
+        }
+        if(pre!= NULL && cur->val < pre->val){
+            swapped[2] = cur;
+            count++;
+        }
+    }
+}
+
 void recoverTree(TreeNode* root){
     if(root==NULL) return;
     TreeNode *cur = root, *pre=NULL;
-    TreeNode *first=NULL, *second=NULL;
+    map<int, TreeNode *>  swapped;
     int count = 0;
     while(cur != NULL){
         if(cur->left == NULL){
-            if(count==0){
-                if(cur->right !=NULL && cur->val > cur->right->val){
-                    first = cur;
-                    count++;
-                }
-                if(pre!= NULL && cur->val < pre->val){
-                    first = pre;
-                    count++;
-                }
-            }
-            if(count>0){
-                if(cur->right !=NULL && cur->val > cur->right->val){
-                    second = cur->right;
-                    count++;
-                }
-                if(pre!= NULL && cur->val < pre->val){
-                    second = cur;
-                    count++;
-                }
-            }
+            getSwappedNodes(pre, cur, swapped, count);
             pre = cur;
             cur=cur->right;
         }else{
@@ -84,34 +88,15 @@ void recoverTree(TreeNode* root){
                 cur = cur->left;
             }else{
                 pred->right = NULL;
-                if(count==0){
-                    if(cur->right !=NULL && cur->val > cur->right->val){
-                        first = cur;
-                        count++;
-                    }
-                    if(pre!= NULL && cur->val < pre->val){
-                        first = pre;
-                        count++;
-                    }
-                }
-                if(count>0){
-                    if(cur->right !=NULL && cur->val > cur->right->val){
-                        second = cur->right;
-                        count++;
-                    }
-                    if(pre!= NULL && cur->val < pre->val){
-                        second = cur;
-                        count++;
-                    }
-                }
+                getSwappedNodes(pre, cur, swapped, count);
                 pre = cur;
                 cur = cur->right;
             }
         }
     }
     // swap first and second
-    if(first!=NULL && second != NULL){
-        swap(first->val, second->val);
+    if(swapped[1]!=NULL && swapped[2] != NULL){
+        swap(swapped[1]->val, swapped[2]->val);
     }
 }
 
