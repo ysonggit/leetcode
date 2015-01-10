@@ -7,7 +7,7 @@ using namespace std;
 int ladderLength(string start, string end, unordered_set<string> &dict) {
     if(dict.size()==0 || start.length() != end.length() || start.length()==0 || end.length()==0) return 0;
     queue<string> Q;
-    set<string> visited;
+    unordered_set<string> visited;
     int level = 1;
     Q.push(start);
     visited.insert(start);
