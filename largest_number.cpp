@@ -17,8 +17,6 @@ using namespace std;
          80
          5
          123
-
-    
  */
 struct GreaterComparator{
     bool operator() (string s1, string s2){
@@ -33,7 +31,7 @@ string largestNumber(vector<int> &num) {
     for(int i : num){
         stringstream ss;
         ss<<i;
-        num_str.push_back(ss.str()); // not overflow because each i can be represented as valid int
+        num_str.push_back(ss.str()); 
     }
     sort(num_str.begin(), num_str.end(), GreaterComparator());
     for(string s : num_str){
