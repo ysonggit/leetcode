@@ -8,19 +8,13 @@ using namespace std;
    use stack s
    s.push(H[0])
    for each height H[i] i = 1...n-1
-       if H[i] >= s.top
-          push H[i]
-       else
-          count = 0
-          while(H[i]<s.top)
-              s.pop
-              count++
-          push H[i]    
-          compute max_rect = max {max_rect,
-                                  max ( count * min_of_poped_heights,
-                                        (count+1) * min_among_poped_heights_plus_current_height )}
- */
+       if(H[i]<H[s.top])
+          s.pop
+          compute popped area and update max_rect (...)
+      push i
 
+      http://blog.csdn.net/linhuanmars/article/details/20524507
+*/
 
 int largestRectangleArea(vector<int> &height) {
     if(height.size()==0) return 0;
@@ -39,12 +33,10 @@ int largestRectangleArea(vector<int> &height) {
         }
         s.push(i);
     }
-    // so far, a special case is not considered think of 2,1,2
+    // so far, a special case is not considered think of 2,1,2 or 1, 1
     // the first bar actually contributes to the max rectangle with area 3
-    int min_height_remain = INT_MAX;
     while(!s.empty() ){
         int cur_idx = s.top();
-        //min_height_remain = min(min_height_remain, height[cur_idx]);
         s.pop();
         int cur_area = s.empty() ? n* height[cur_idx] :  (n-s.top()-1)*height[cur_idx];
         max_rect = max(max_rect, cur_area);
