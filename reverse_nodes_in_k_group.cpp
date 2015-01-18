@@ -30,12 +30,13 @@ ListNode *reverseKGroup(ListNode *head, int k) {
     ListNode * pre = fakehead;
     ListNode * cur = pre->next;
     int i=0;
+    ListNode * nex_backup = NULL;
     while(cur != NULL){
         i++;
         if(i%k==0){
             // reverse k nodes then move on
             // tricky: make a copy of next node to rejoin
-            ListNode * nex_backup = cur->next;
+            nex_backup = cur->next;
             //  cout<<"Next node backup : "<<nex_backup->val<<endl;
             pre->next = reverseKNodes(pre->next, cur->next);
             // printList(pre);
