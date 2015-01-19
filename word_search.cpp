@@ -7,22 +7,22 @@ using namespace std;
  */
 // r and c are row and column indices of the starting letter
 // cur_idx is the index of current letter in given word
-bool dfs(const vector<vector<char> > &board, const string& word, int r, int c, int cur_idx, vector<vector<bool> > & visited){
+bool dfs(const vector<vector<char> > &board, const string& word, int r, int c, int cur_idx, vector<vector<int> > & visited){
     if(r<0 || r>=board.size() || c<0 || c>=board[0].size() ) return false;
     char cur = word[cur_idx];
-    if(cur != board[r][c] || visited[r][c] == true )  return false;
-    if(visited[r][c] == false && cur == board[r][c] && cur_idx ==word.length()-1){
+    if(cur != board[r][c] || visited[r][c] == 1 )  return false;
+    if(visited[r][c] == 0 && cur == board[r][c] && cur_idx ==word.length()-1){
         return true;
     }
 
     bool res = false;
     if(cur == board[r][c]){
-        visited[r][c] = true;
+        visited[r][c] = 1;
         res = dfs(board, word, r+1, c, cur_idx+1, visited) ||
             dfs(board, word, r-1, c, cur_idx+1, visited) ||
             dfs(board, word, r, c+1, cur_idx+1, visited) ||
             dfs(board, word, r, c-1, cur_idx+1, visited);
-        visited[r][c] = false;
+        visited[r][c] = 0;
     }
     return res;
 }
@@ -31,14 +31,7 @@ bool exist(vector<vector<char> > &board, string word) {
     if(board.size()==0) return false;
     int rows = board.size();
     int cols = board[0].size();
-    vector<vector<bool> > visited;
-    vector<bool> row;
-    for(int j=0; j<cols; j++){
-        row.push_back(false);
-    }
-    for(int i=0; i<rows; i++){
-        visited.push_back(row);
-    }
+    vector<vector<int> > visited(rows, vector<int>(cols, 0));
     for(int i=0; i<rows; i++){
         for(int j=0; j<cols; j++){
             if(dfs(board, word, i, j, 0, visited)){
