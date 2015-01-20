@@ -17,7 +17,7 @@
 template <typename T>
 void printVector(std::vector<T> v){
    for(T i : v){
-      std::cout<<i<<" ";
+       std::cout<<i<<" ";
    }
    std::cout<<std::endl;
 }
@@ -25,8 +25,9 @@ void printVector(std::vector<T> v){
 template <typename T>
 void print2DVector(std::vector<std::vector<T> > vv){
      for(std::vector<T> v: vv){
-	  printVector(v);
+         printVector(v);
      }
+     std::cout<<std::endl;
 }
 
 ///////////////////////////////////////////////////////////
