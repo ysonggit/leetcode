@@ -90,7 +90,7 @@ TEST(ATOI, VI){
 
 TEST(ATOI, VII){
     const char * str = "  +0  123";
-    int res = 0; // they
+    int res = 0;
     ASSERT_EQ(res, atoi(str));
 }
 
