@@ -17,7 +17,7 @@ using namespace std;
         " + 321" return 0  instead of 321 
  */
 int atoi(const char *str){
-    if(str==NULL || str=='\0') return 0;
+    if(str==NULL || *str=='\0') return 0;
     int num = 0;
     int i=0;
     int n= strlen(str);

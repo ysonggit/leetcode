@@ -12,7 +12,7 @@ double pow(double x, int n){
     if(n==1) return x;
     double v = pow(x, abs(n)>>1);
     double vv = v * v;
-    if(n&1==1){
+    if(n&1){
         vv *= x;
     }
     return (n<0) ? 1/vv : vv;
