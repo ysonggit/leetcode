@@ -78,7 +78,7 @@ bool isMatch(const char *s, const char *p){
             ++p;
         }else{ // has star
             // idea : * matches any seq, so just pass by any char in s until found a char matches non-* char in p
-            if(!pre_s) return false;
+            if(!pre_s) return false; 
             pre_s++;  // check matching start form pre_s+1
             s = pre_s; // so tricky: update both pre_s, and s
             p = pre_p;
