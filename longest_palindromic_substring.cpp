@@ -57,6 +57,7 @@ string longestPalindrome(string s) {
     
     return s.substr(start_idx, max_length);
 }
+
 /*
   for every center, a character or a space between two chars, search for two sides
   totally 2N-1 centers
@@ -91,6 +92,7 @@ string longestPalindrome(string s){
     return longest;
 }
 */
+
 
 int main(){
     string s("abcddcba");
