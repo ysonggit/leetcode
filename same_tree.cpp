@@ -17,19 +17,19 @@ TEST(SameTree, I){
 
 TEST(SameTree, II){
     string vals = "{4,2,5,1,3,#,6}";
-vector<TreeNode*> p, q;
+    vector<TreeNode*> p, q;
     treeInitializer(p, vals);
-treeInitializer(q, vals);
-ASSERT_EQ(true, isSameTree(p[0],q[0]));
+    treeInitializer(q, vals);
+    ASSERT_EQ(true, isSameTree(p[0],q[0]));
 }
 
 TEST(SameTree, III){
     string vals = "{4,2,5,1,3,#,6}";
-vector<TreeNode*> p, q;
+    vector<TreeNode*> p, q;
     treeInitializer(p, vals);
-string vals1 = "{4,2,5,3,1,#,6}";
-treeInitializer(q, vals1);
-ASSERT_EQ(false, isSameTree(p[0],q[0]));
+    string vals1 = "{4,2,5,3,1,#,6}";
+    treeInitializer(q, vals1);
+    ASSERT_EQ(false, isSameTree(p[0],q[0]));
 }
 
 int main(int argc, char *argv[]){
