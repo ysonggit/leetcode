@@ -4,7 +4,7 @@
 using namespace std;
 
 /*
-  idea : what does the binary tree implicate?
+  idea : what could a binary tree implicate?
          ____________________
          |                  |
       -- |divide and conquer| OR binary search OR DFS/BFS
@@ -25,7 +25,8 @@ using namespace std;
   base case:
   if both empty, true
   if both one char, true iff s1 == s2
-  
+
+  26ms
  */
 
 bool isScramble(string s1, string s2) {
@@ -57,6 +58,52 @@ bool isScramble(string s1, string s2) {
         }
     }
     return is_scramble;
+}
+
+/*
+  DP 
+  define D[k][i][j]: D[k][i][j] is true means
+                       the substring starting from s2[j] ending at j+k (s2[j...j+k])
+                       is a scramble of s1 starting from i, that is s[i...i+k]
+
+  transition equation
+  D[len-1][i][j] is true means s1[i...i+len-1] and s2[j..j+len-1] are scrambled
+    true if D[k-1][i][j] && D[len-k-1][i+k][j+k], that is,
+         s1[i..i+k-1] and s2[j..j+k] are scrambled AND
+         s1[i+k..i+len-1] and s2[j+k..j+len-1] are scrambled
+    OR divide in another way
+         s1[i..i+k-1] and s2[j+len-k..j+len-1] are scrambled AND
+         s1[i+k..i+len-1] and s2[j..j+len-k-1] are scrambled
+  base case
+  D[0][i][j] = (s1[i]== s2[j]) ? true : false;
+
+  69ms
+ */
+
+bool isScramble(string s1, string s2) {
+    if(s1.empty()) return s2.empty();
+    if(s1.length()==1) return s1 == s2;
+    const int n = s1.length(), m = s2.length();
+    if(n!=m) return false;
+    bool D[n][n][n];
+    for(int i=0; i<n; i++){
+        for(int j=0; j<n; j++){
+            D[0][i][j] = (s1[i]== s2[j]) ? true : false;
+        }
+    }
+    for(int len=2; len<=n; len++){
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                bool is_scramble = false;
+                for(int k=1; k<len && !is_scramble; k++){
+                    is_scramble = (D[k-1][i][j] && D[len-k-1][i+k][j+k]) ||
+                        (D[k-1][i][j+len-k] && D[len-k-1][i+k][j]);
+                }
+                D[len-1][i][j] = is_scramble;
+            }
+        }
+    }
+    return D[n-1][0][0]; 
 }
 
 TEST(Scramble, I){
