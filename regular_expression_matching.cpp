@@ -46,7 +46,7 @@ bool isMatch(const char *s, const char *p) {
     M[i+1][j+1] =  M[i][j] && s[i] == p[j]  or p[j] is a . 
  2. if p[j] is '*'
     if p[j-1] is NOT '.':
-          M[i+1][j+1] = M[i+1][j]               s="aa"  p="a*"
+          M[i+1][j+1] = M[i+1][j]                 s="aa"  p="a*"
                         M[i+1][j-1]               s="aab" p="c*a*b"
                         M[i][j+1] && s[i] == s[i-1] && s[i-1] = p[j-1] s="abbbc" p="ab*c"
     if p[j-1] is '.':
@@ -61,6 +61,9 @@ bool isMatch(const char *s, const char *p) {
     const int n = strlen(s);
     const int m = strlen(p);
     vector<vector<int> > M(n+1, vector<int>(m+1, 0));
+    // tricky initialization :
+    // what is value of M[0][j] : the possible p to match an empty s:
+    // s="" how about p="a*" or "*****" or "a*bcd*"
     M[0][0] = 1; //base case: empty string
     M[0][1] = (p[0] == '*' ) ? 1 : 0;
     for(int j=2; j<=m; j++){
