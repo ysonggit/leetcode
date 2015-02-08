@@ -68,7 +68,6 @@ bool isMatch(const char *s, const char *p) {
     M[0][1] = (p[0] == '*' ) ? 1 : 0;
     for(int j=2; j<=m; j++){
         if(p[j-1]=='*') {
-            // check if all true before j, then true
             M[0][j] = M[0][j-2];
         }
     }
