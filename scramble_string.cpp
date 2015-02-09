@@ -4,7 +4,7 @@
 using namespace std;
 
 /*
-  idea : what could a binary tree implicate?
+  idea : what could a binary tree indicate?
          ____________________
          |                  |
       -- |divide and conquer| OR binary search OR DFS/BFS
@@ -79,7 +79,7 @@ bool isScramble(string s1, string s2) {
 
   69ms
  */
-
+/*
 bool isScramble(string s1, string s2) {
     if(s1.empty()) return s2.empty();
     if(s1.length()==1) return s1 == s2;
@@ -104,7 +104,7 @@ bool isScramble(string s1, string s2) {
         }
     }
     return D[n-1][0][0]; 
-}
+    }*/
 
 TEST(Scramble, I){
     string s1("great");

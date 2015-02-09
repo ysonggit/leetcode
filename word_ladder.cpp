@@ -18,7 +18,7 @@ int ladderLength(string start, string end, unordered_set<string> &dict) {
         Q.pop();
         num_cur_level--;
         // determine all edges connecting wd to other words
-        // maximal 25*L edges
+        // maximal 26*L edges
         for(int i=0; i<wd.length(); i++){
             char cur = wd[i];
             for(char c='a'; c<='z'; c++){
