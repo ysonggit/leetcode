@@ -38,9 +38,9 @@ void printWordTree(const WordTree & word_tree){
 bool nextWord(string wd1, string wd2){
     int count = 0;
     for(int i=0; i<wd1.length(); i++){
-        if(wd2.find(wd1[i]) == string::npos) count++;
+        if(wd2[i] == wd1[i]) count++;
     }
-    return (count==1) ? true : false;
+    return (count == wd1.length()-1) ? true : false;
 }
 
 int buildWordTree(string start, string end, unordered_set<string> & dict, WordTree & word_tree){
@@ -71,9 +71,7 @@ int buildWordTree(string start, string end, unordered_set<string> & dict, WordTr
                         }
                     }
                     if(wd==end){
-                        if(word_tree[wd_cp].count(end)<1){
-                            word_tree[wd_cp].insert(end);
-                        }
+                        word_tree[wd].insert(end);
                         if(!minimal_steps_found){
                             level++;
                             minimal_steps_found = true;
@@ -122,7 +120,6 @@ vector<vector<string>> findLadders(string start, string end, unordered_set<strin
     int steps = buildWordTree(start, end, dict, word_tree);
     // cout<<"steps = "<<steps<<endl;
     // printWordTree(word_tree);
-    // cout<<"-----------\n";
     unordered_set<string> visited;
     vector<string> ladder;
     ladder.push_back(start);
@@ -154,6 +151,13 @@ TEST(LADDER, III){
     print2DVector(results);
 }
 
+TEST(LADDER, IV){
+    string start("qa");
+    string end("sq");
+    unordered_set<string> dict= {"si","go","se","cm","so","ph","mt","db","mb","sb","kr","ln","tm","le","av","sm","ar","ci","ca","br","ti","ba","to","ra","fa","yo","ow","sn","ya","cr","po","fe","ho","ma","re","or","rn","au","ur","rh","sr","tc","lt","lo","as","fr","nb","yb","if","pb","ge","th","pm","rb","sh","co","ga","li","ha","hz","no","bi","di","hi","qa","pi","os","uh","wm","an","me","mo","na","la","st","er","sc","ne","mn","mi","am","ex","pt","io","be","fm","ta","tb","ni","mr","pa","he","lr","sq","ye"};
+    vector<vector<string> >results = findLadders(start, end, dict);
+    print2DVector(results);
+}
 
 int main(int argc, char *argv[]){
     testing::InitGoogleTest(&argc, argv);
