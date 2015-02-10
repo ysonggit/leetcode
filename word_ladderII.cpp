@@ -23,43 +23,41 @@ using namespace std;
                |
               cog
 
-   Time Limit Exceeded (WTF)
 */
+typedef unordered_map<string, unordered_set<string> > WordTree;
 
-struct WordTreeNode{
-    string word;
-    unordered_set<WordTreeNode*> children;
-    WordTreeNode(string s) : word(s), children(){}
-};
-
-void printWordTree(const unordered_map<string, WordTreeNode*> & word_tree){
+void printWordTree(const WordTree & word_tree){
     for(auto it = word_tree.begin(); it!=word_tree.end(); ++it){
         cout<<"("<<it->first<<") --> \n";
-        WordTreeNode * n = it->second;
-        for(auto cit = n->children.begin(); cit!= n->children.end(); ++cit){
-            cout<<"\t("<<(*cit)->word<<")\n";
+        for(auto cit = it->second.begin(); cit!= it->second.end(); ++cit){
+            cout<<"\t("<<(*cit)<<")\n";
         }
     }
 }
 
-int buildWordTree(string start, string end, unordered_set<string> & dict, unordered_map<string, WordTreeNode*> & word_tree){
+bool nextWord(string wd1, string wd2){
+    int count = 0;
+    for(int i=0; i<wd1.length(); i++){
+        if(wd2.find(wd1[i]) == string::npos) count++;
+    }
+    return (count==1) ? true : false;
+}
+
+int buildWordTree(string start, string end, unordered_set<string> & dict, WordTree & word_tree){
     if(start.empty() || end.empty() || dict.size()==0 ) return 0;
-    queue<string> Q;
     unordered_set<string> visited;
-    Q.push(start);
     visited.insert(start);
-    WordTreeNode * root = new WordTreeNode(start);
-    word_tree.insert(make_pair(start, root));
-    WordTreeNode * leaf = new WordTreeNode(end);
-    word_tree.insert(make_pair(end, leaf));
-    int num_cur_level = 1;
-    int num_nex_level = 0;
-    int level = 1;
+    set<string> current, next;
+    current.insert(start);
     bool minimal_steps_found = false;
-    while(!Q.empty()){
-        string wd = Q.front();
-        Q.pop();
-        num_cur_level--;
+    int level = 1;
+    while(!current.empty()){
+        string wd = *current.begin();
+        current.erase(current.begin());
+        if(word_tree.count(wd)<1){
+            unordered_set<string> children;
+            word_tree.insert(make_pair(wd, children) );
+        }
         for(int i=0; i<wd.length(); i++){
             char cur = wd[i];
             string wd_cp(wd);
@@ -67,20 +65,15 @@ int buildWordTree(string start, string end, unordered_set<string> & dict, unorde
                 if(cur != c){
                     wd[i] = c;
                     if(dict.find(wd)!=dict.end()){
-                        if(word_tree.count(wd)<1){
-                            word_tree.insert(make_pair(wd, new WordTreeNode(wd)));   
-                        }
-                        if(word_tree[wd_cp]->children.count(word_tree[wd]) < 1){
-                            (word_tree[wd_cp]->children).insert(word_tree[wd]);
-                        }
                         if(visited.find(wd) == visited.end()){
-                            num_nex_level++;
                             visited.insert(wd);
-                            Q.push(wd);
+                            next.insert(wd);
                         }
                     }
                     if(wd==end){
-                        (word_tree[wd_cp]->children).insert(word_tree[end]);
+                        if(word_tree[wd_cp].count(end)<1){
+                            word_tree[wd_cp].insert(end);
+                        }
                         if(!minimal_steps_found){
                             level++;
                             minimal_steps_found = true;
@@ -90,25 +83,29 @@ int buildWordTree(string start, string end, unordered_set<string> & dict, unorde
                 }
             }
         }
-        if(num_cur_level==0){
-            swap(num_cur_level, num_nex_level);
+        for(auto it=next.begin(); it!= next.end(); ++it){
+            if(nextWord(*it, wd)){
+                word_tree[wd].insert(*it);
+            }
+        }
+        if(current.size()==0){
+            current.swap(next);
             if(!minimal_steps_found) level++;
         }
     }
     return level;
 }
 
-void dfs(vector<vector<string> > & paths, vector<string> & ladder, unordered_set<string> & visited, string cur, unordered_map<string, WordTreeNode*> & word_tree, string& end, int steps){
-    WordTreeNode * cur_node = word_tree[cur];
+void dfs(vector<vector<string> > & paths, vector<string> & ladder, unordered_set<string> & visited, string cur, WordTree & word_tree, string& end, int steps){
     if(ladder.size()==steps){
-        if(ladder.back()==end ){
+        if(ladder.back()==end){
             paths.push_back(ladder);
             return ;
         }
     }
-    for(auto it=cur_node->children.begin(); it != cur_node->children.end(); ++it){
-        string nex_wd = (*it)->word;
-        if(visited.find(nex_wd) == visited.end()){
+    for(auto it = word_tree[cur].begin(); it!= word_tree[cur].end(); ++it){
+        string nex_wd = *it;
+        if(visited.count(nex_wd) < 1){
             ladder.push_back(nex_wd);
             visited.insert(nex_wd);
             dfs(paths, ladder, visited, nex_wd, word_tree, end, steps);
@@ -121,10 +118,11 @@ void dfs(vector<vector<string> > & paths, vector<string> & ladder, unordered_set
 vector<vector<string>> findLadders(string start, string end, unordered_set<string> &dict) {
     vector<vector<string> >paths;
     if(start.empty() || end.empty() || dict.size()==0 ) return paths;
-    unordered_map<string, WordTreeNode*> word_tree;
+    WordTree word_tree;
     int steps = buildWordTree(start, end, dict, word_tree);
-    //cout<<"steps = "<<steps<<endl;
-    //printWordTree(word_tree);
+    // cout<<"steps = "<<steps<<endl;
+    // printWordTree(word_tree);
+    // cout<<"-----------\n";
     unordered_set<string> visited;
     vector<string> ladder;
     ladder.push_back(start);
@@ -155,6 +153,7 @@ TEST(LADDER, III){
     vector<vector<string> >results = findLadders(start, end, dict);
     print2DVector(results);
 }
+
 
 int main(int argc, char *argv[]){
     testing::InitGoogleTest(&argc, argv);
