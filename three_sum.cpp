@@ -6,7 +6,6 @@ vector<vector<int> > threeSum(vector<int> &num) {
     vector<vector<int> > results;
     if(num.size() <= 2) return results;
     std::sort(num.begin(), num.end());
-       
     for(int i=0; i<num.size(); i++){
         int target = - num[i];
         // invoke twoSum
@@ -32,7 +31,9 @@ vector<vector<int> > threeSum(vector<int> &num) {
                 back--;
             }
         }
-        if(num[i] == num[i+1]) i++;
+        if(i+1<num.size()){
+            while(num[i] == num[i+1]) i++;
+        }
     }
     return results;
 }
