@@ -21,33 +21,29 @@ using namespace std;
         sol - current element  
  */
 
-void dfs(vector<vector<int> > &results, vector<int> & num, vector<int> & sol, bool * used){
+void dfs(vector<vector<int> > &results, vector<int> & num, vector<int> & sol, vector<int> & visited){
     if(sol.size() == num.size()){
         results.push_back(sol);
-        return ;
+        return;
     }
     for(int i=0; i<num.size(); i++){
-        if(!used[i]){
+        if(visited[i]==0){
+            visited[i] = 1;
             sol.push_back(num[i]);
-            used[i] = true;
-            dfs(results, num, sol, used);
-            used[i] = false;
+            dfs(results, num, sol, visited);
             sol.pop_back();
+            visited[i] = 0;
         }
     }
 }
 
 vector<vector<int> > permute(vector<int> &num) {
     vector<vector<int> > results;
-    if(num.size()==0) return results;
+    int n = num.size();
+    if(n ==0) return results;
     vector<int> sol;
-    bool * used = new bool[num.size()];
-    for(int i=0; i<num.size(); i++){
-        used[i] = false;
-    }
-    dfs(results, num, sol, used);
-    delete [] used;
-    used = NULL;
+    vector<int> visited(n, 0);
+    dfs(results, num, sol, visited);
     return results;
 }
 
