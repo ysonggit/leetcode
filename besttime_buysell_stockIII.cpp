@@ -3,7 +3,7 @@
 
 using namespace std;
 /*
-  idea : divied and conque
+  idea : divide and conquer
   max_profit[0..n-1] = max_profit[0,i] + max_profit[i+1,n-1] 
   use array left[] to store the max_profit obtained before day i
   use array right[] to store the max_profit obtained after day i
