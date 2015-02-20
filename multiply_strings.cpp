@@ -7,7 +7,7 @@ using namespace std;
   represent each string number as a vector of integers (refer add-one)
   for example store "9876732" as
                _______________
-               |9|8|7|6|7|3|2|
+               |2|3|7|6|7|8|9|
                ---------------
   
   for a[0..n-1] and b[0..m-1]
