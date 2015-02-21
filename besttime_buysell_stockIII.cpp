@@ -7,7 +7,9 @@ using namespace std;
   max_profit[0..n-1] = max_profit[0,i] + max_profit[i+1,n-1] 
   use array left[] to store the max_profit obtained before day i
   use array right[] to store the max_profit obtained after day i
- */
+  17ms
+*/
+/*
 int maxProfit(vector<int> &prices) {
     int n = prices.size();
     if(n<=1) return 0;
@@ -34,6 +36,33 @@ int maxProfit(vector<int> &prices) {
         max_profit= max(max_profit, left[i]+right[i+1]);
     }
     return max_profit;
+    }*/
+
+/*
+  DP :
+  http://blog.csdn.net/linhuanmars/article/details/23236995
+  local[i][j] means the max profit from last transaction at day i, totally j transactions
+  global[i][j] means the max profit of j transactions at day i
+  local[i][j] = max(global[i-1][j-1]+max(0, diff), local[i-1][j]+diff)
+  global[i][j] = max(global[i-1][j], local[i][j])
+
+  36ms
+*/
+
+int maxProfit(vector<int> & prices){
+    int n = prices.size();
+    if(n<=1) return 0;
+    int k = 2;
+    vector<vector<int> > local(n, vector<int>(k+1, 0));
+    vector<vector<int> > global(local);
+    for(int i=1; i<n; i++){
+        for(int j=1; j<=k; j++){
+            int diff = prices[i] - prices[i-1];
+            local[i][j] = max(global[i-1][j-1]+max(0, diff), local[i-1][j]+diff);
+            global[i][j] = max(global[i-1][j], local[i][j]);
+        }
+    }
+    return global[n-1][k];
 }
 
 TEST(StockIII, I){
