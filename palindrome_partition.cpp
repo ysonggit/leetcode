@@ -43,7 +43,7 @@ vector<vector<string>> partition(string s) {
     return results;
 }
 
-/* DP: Refer Palindrome Partation II (O^2)
+/* DP: Refer Palindrome Partation II O(n^2)
    create a 2D table P(i,j) : true if s[i..j] is a palindrome
    // other's solution 62ms
 
