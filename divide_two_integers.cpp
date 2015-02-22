@@ -18,14 +18,14 @@ using namespace std;
 
   0) 14<<0 ->14,  res += 1<<0 8, dividend -= 14 = 8 < dividor
 
-  overflow: use unsigned long 
+  overflow: use long long
 */
 
 int divide(int dividend, int divisor) {
     if(divisor==0) return INT_MAX;
     // if (a^b)>=0 , then a and b have the same sign
     int sign = ((dividend ^ divisor)>=0) ? 1 : -1;
-    // long long 2^63 is required, unsigned long 2^31 is not enough 
+    // long long 2^63 
     long long dividend_ll = abs((long long)dividend);
     long long divisor_ll = abs((long long)divisor);
     long long res_ll = 0;
