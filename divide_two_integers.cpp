@@ -36,7 +36,7 @@ int divide(int dividend, int divisor) {
             res_ll += (1<<i);
         }
     }
-    // note , unsigned long colld represent a number greater than INT_MAX
+    // note , long long could represent a number greater than INT_MAX
     if(sign<0) res_ll = - res_ll;
     // above if statement is necessary
     // otherwise, when res_ll = 2147483648, and sign is -1
