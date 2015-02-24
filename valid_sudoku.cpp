@@ -1,80 +1,78 @@
 #include "utils.h"
+#include <gtest/gtest.h>
 
 using namespace std;
+/*
+http://stackoverflow.com/questions/5111434/sudoku-validity-check-algorithm-how-does-this-code-works
+it uses an int flag (initially set to zero) as a "bit array";
+for each value, it checks if the corresponding bit in the flag is set,
+and if it's not, it sets it.
 
-bool isValidGroup(const vector<char> & line){
-    map<char, int> cache;
-    for(char c : line){
-	if(c!='.'){
-	    if(cache.find(c)==cache.end()){
-		cache[c] = 1;
-	    }else{
-		return false;   
-	    }
-	}
-    } 
-    return true;
-}
+If, instead, that bit position is already set,
+it knows that the corresponding value has already been seen,
+so the piece of Sudoku is invalid.
 
-bool isValidSudoku(vector<vector<char> > &board) {
-    if(board.size() !=9 || board[0].size()!=9 ) return false;
-    // check each row
-    for(vector<char> row : board){
-	if(!isValidGroup(row)){
-	    cout<<"1"<<endl;
-	    return false;
-	}
-    }
-    // check each column
-    for(int i=0; i<9; i++){
-	// create column
-	vector<char> col;
-	for(int c=0; c<9; c++){
-	    col.push_back(board[c][i]);
-	}
-	if(!isValidGroup(col)){
-	    cout<<"2"<<endl;
-	    return false;
-	}
-    }
-    // check each sub-grid
-    for(int i=0; i<9; i++){
-	// create grid
-	vector<char> grid;
-	for(int j=0; j<9; j++){
-	    int r = i/3*3+j/3, c = i%3*3+j%3;
-	    grid.push_back(board[r][c]);
-	}
-	
-	if(!isValidGroup(grid)){
-	    printVector(grid);
-	    return false;
-	}
+*/
+bool isValidSudoku(vector<vector<char> > & board){
+    // board empty? 
+    const int n = board.size();
+    vector<int> col_flags(n, 0);
+    vector<int> box_flags(n, 0);
+    for(int i=0; i<n; i++){
+        // elements in the same row needs a flag
+        int row_flag = 0;
+        for(int j=0; j<n; j++){
+            if(board[i][j]!='.'){
+                // for numbers 1 to 9
+                // prepare a bit mask by shift the 1 left 0 to 8 bits 
+                int bit = 1<< (board[i][j]-'1');
+                // sub-grid rowIdx = 3*(grid_idx/3) + cell_idx/3
+                //int r = i/3*3+j/3, c = i%3*3+j%3;
+                int box_idx = i/3*3 + j/3;
+                // row_flag & bit != 0  --- will be evaluated  (row_flag & (bit !=0 ))
+                if(row_flag & bit || col_flags[j] & bit || box_flags[box_idx] & bit ){
+                    return false;
+                }
+                row_flag |= bit;
+                col_flags[j] |= bit;
+                box_flags[box_idx] |= bit;
+            }
+        }
     }
     return true;
 }
 
-void test(vector<vector<char> > &board){
-    if(isValidSudoku(board)){
-	cout<<"valid\n";
-    }else{
-	cout<<"false\n";
-    }
-    
-}
+TEST(Sudoku, I){
+    vector<string> rows ={
+        "..5.....6","....14...",".........",".....92..","5....2...",".......3.","...54....","3.....42.","...27.6.."
+    };
+    vector<vector<char> > board;
+    for_each(rows.begin(), rows.end(), [&board](string & row){
+            vector<char> v;
+            for_each(row.begin(), row.end(), [&v](char & c){v.push_back(c); });
+            board.push_back(v);
+        } );
+    print2DVector(board);
+    bool res = true;
+    ASSERT_EQ(res, isValidSudoku(board));
+ }
 
-int main(){
-    const char *a  = "....5..1..4.3..........3..18......2...2.7.....15...........2....2.9.......4......";
-    vector<vector<char> > sudoku;
-    for(int i=0; i<9; i++){
-	vector<char> row;
-	for(int j=0; j<9; j++){
-	    int offset = i * 9 + j;
-	    row.push_back(*(a+offset));	    
-	}
-	sudoku.push_back(row);
-    }
-    test(sudoku);
-    
-    return 0;
+TEST(Sudoku, II){
+    vector<string> rows ={
+       "7...4....","...865...",".1.2.....",".....9...","....5.5..",".........","......2..",".........","........."
+    };
+    vector<vector<char> > board;
+    for_each(rows.begin(), rows.end(), [&board](string & row){
+            vector<char> v;
+            for_each(row.begin(), row.end(), [&v](char & c){v.push_back(c); });
+            board.push_back(v);
+        } );
+    print2DVector(board);
+    bool res = false;
+    ASSERT_EQ(res, isValidSudoku(board));
+ }
+
+int main(int argc, char *argv[]){
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
