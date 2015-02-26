@@ -1,50 +1,11 @@
 #include "utils.h"
+#include <gtest/gtest.h>
 
 using namespace std;
-/*
- O(nlogn) time, O(n) space
-  
-vector<int> twoSum(vector<int> & numbers, int target){
-    vector<int> result;
-    int n = numbers.size();
-    if(n<2) return result;
-    unordered_multimap<int, int> val_idx;
-    for(int i=0; i<n; i++){
-        val_idx.insert(make_pair(numbers[i], i)); //use val_idx[numbers[i]]=i will replace existed entry
-    }
-    sort(numbers.begin(), numbers.end());
-    int front = 0, back = n-1;
-    while(front<back){
-        int num1 = numbers[front];
-        int num2 = numbers[back];
-        if(num1 + num2 ==target){
-            auto range_iter = val_idx.equal_range(num1);
-            for(auto it = range_iter.first; it!= range_iter.second; ++it){
-                result.push_back(it->second+1);
-            }
-            if(num1 != num2){
-                range_iter = val_idx.equal_range(num2);
-                for(auto it = range_iter.first; it!= range_iter.second; ++it){
-                    result.push_back(it->second+1);
-                }
-            }
-            front++;
-            back--;
-            //while(numbers[front]==numbers[front-1]) front++; // remove duplicates
-            //while(numbers[back]==numbers[back-1]) back--;
-        }else if(num1+num2<target){
-            front++;
-        }else{
-            back--;
-        }
-    }
-    sort(result.begin(), result.end());
-    return result;
-    }*/
 
 /*
   O(nlogn) time, O(n) space
- */
+ 
 vector<int> twoSum(vector<int> & numbers, int target){
     vector<int> result;
     int n = numbers.size();
@@ -78,21 +39,51 @@ vector<int> twoSum(vector<int> & numbers, int target){
     }
     sort(result.begin(), result.end()); // O(1) time since always 2 elements 
     return result;
+    }*/
+// use hashmap O(n) time O(n) space
+vector<int> twoSum(vector<int> & numbers, int target){
+    unordered_map<int, int> cache;
+    for(int i=0; i<numbers.size(); i++){
+        int first = numbers[i];
+        int second = target - first;
+        if(cache.find(second) == cache.end()){
+            cache[first] = i;
+        }else{
+            return vector<int>{cache[second]+1, i+1};
+        }
+    }
+    return vector<int>{};
 }
 
-int main(int argc, char *argv[])
-{
+TEST(TwoSum, I){
     vector<int> numbers={2,7,11,15};
     int target = 9;
     vector<int> result = twoSum(numbers, target);
     printVector(result);
-    vector<int> numbers1={0,4,1,0};
-    int target1 = 0;
-    vector<int> result1 = twoSum(numbers1, target1);
-    printVector(result1);
-    vector<int> numbers2= {1,2,3};
-    int target2 = 4;
-    vector<int> result2 = twoSum(numbers2, target2);
-    printVector(result2);
-    return 0;
+}
+
+TEST(TwoSum, II){
+    vector<int> numbers={0,4,1,0};
+    int target = 0;
+    vector<int> result = twoSum(numbers, target);
+    printVector(result);
+}
+
+TEST(TwoSum, III){
+    vector<int> numbers={1,2,3};
+    int target =4;
+    vector<int> result = twoSum(numbers, target);
+    printVector(result);
+}
+
+TEST(TwoSum, IV){
+    vector<int> numbers={1,2,3};
+    int target =0;
+    vector<int> result = twoSum(numbers, target);
+    printVector(result);
+}
+
+int main(int argc, char *argv[]){
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
