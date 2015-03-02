@@ -14,6 +14,7 @@ idea: for each element in array, get the max left bar height and max right bar h
 
       sum up all container's volume
  */
+/*
 int trap(int A[], int n) {
     if(A==NULL || n<=0) return 0;
     int total = 0;
@@ -32,11 +33,62 @@ int trap(int A[], int n) {
     for(int i=0; i<n; i++){
         // check valid container
         if(A[i]<maxleftbar[i] && A[i]<maxrightbar[i]){
-            // compute volumn
+            // compute volume
             total += min(maxleftbar[i], maxrightbar[i])-A[i];
         }
     }
     return total;
+    }*/
+
+/*
+  idea : use stack to store the indices of bars, scan once
+  if current bar height is smaller than the top of stack, push
+  else, pop up the top until stack is empty or top is greater than current one
+  while popping up, add up the volume and update the max vol
+  then push current bar height to stack
+  example:
+  [0,1,0,2,1,0,1,3,2,1,2,1]
+  4|
+  3|              _
+  2|      _      | |_   _
+  1|  _  | |_   _| | |_| |_
+  0|_|_|_|_|_|_|_|_|_|_|_|_|
+
+  i=0, push 0, stack: 0
+  i=1, pop stack and push 1, maxVol = 0, stack : 1
+  i=2, push 2, stack : 2, 1
+  i=3, pop stack, maxVol = 1, push 3, stack : 3
+  i=4, push 4, stack : 4, 3
+  i=5, push 5, stack : 5, 4, 3
+  i=6, pop stack, maxVol = 2, push 6, stack : 6, 4, 3
+  i=7, pop stack, maxVol = 5, push 7, stack : 7
+  i=8, push 8, stack : 8, 7
+  i=9, push 9, stack : 9, 8, 7
+  i=10, pop stack, maxVol = 6, push 10, stack : 10, 8, 7
+  i=11, push 11
+  done
+ */
+
+int trap(int A[], int n){
+    if(A==NULL || n<=1) return 0;
+    stack<int> bars_left;
+    int max_volume = 0;
+    // trick: pass by all leading 0 height bars
+    int i=0;
+    while(A[i]==0) i++;
+    for(; i<n; i++){
+        int cur_bar_height = A[i];
+        // keep on pop until stack is empty or top is greater
+        while(! bars_left.empty() && cur_bar_height >= A[bars_left.top()] ){
+            int popped_bar = bars_left.top();
+            bars_left.pop();
+            if(bars_left.empty()) break;
+            // the width should be i - bar_left.top - 1 not i-bar_left.top+1
+            max_volume += (i- bars_left.top() -1) * (min(cur_bar_height, A[bars_left.top()])-A[popped_bar]);
+        }
+        bars_left.push(i);
+    }
+    return max_volume;
 }
 
 TEST(TrappingWater, One){
