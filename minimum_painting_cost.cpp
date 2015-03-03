@@ -14,6 +14,8 @@ Return the minimum cost of painting all the houses, no two neighboring houses ar
 // {{10, 0, 4}  {10, 0, 1}, ... }
 #include <gtest/gtest.h>
 #include "utils.h"
+#include <numeric>
+
 using namespace std;
 
 void dfs(vector<vector<int> > & prices, vector<int>& costs, vector<int> & sol, int cur_house_idx, int pre_house_color_idx){
