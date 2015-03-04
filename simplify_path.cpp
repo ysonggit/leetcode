@@ -11,27 +11,28 @@ using namespace std;
   tip: use string constructor (iterator first, iterator last)
 */
 
-string simplifyPath(string path) {
+string simplifyPath(string path) {    
     if(path.empty()) return "";
-    vector<string> res; // use vector to simulate stack
+    vector<string> dirs;
     for(auto it=path.begin(); it!=path.end(); ){
-        ++it;// pass by the first leading '/', so now it points a non-/ char
+        ++it;// pass by the first leading '/'
         auto slash = find(it, path.end(), '/');
         string dir_name = string(it, slash); // constructed from iterators
         if(dir_name == ".."){
-            if(!res.empty()) res.pop_back();
+            if(!dirs.empty()) dirs.pop_back();
         }else{
             if(dir_name!="." && !dir_name.empty()) {
-                res.push_back(dir_name);
+                dirs.push_back(dir_name);
             }
         }
         it = slash;
     }
-    string fullpath("/");
-    for_each(res.begin(), res.end(), [&fullpath](string & s){
-            fullpath += s + string("/");
+    if(dirs.empty()) return string("/");
+    string fullpath;
+    for_each(dirs.begin(), dirs.end(), [&fullpath](string & s){
+            fullpath += string("/")+s;
         });
-    if(fullpath.length()>2) fullpath.resize(fullpath.length()-1);
+
     return fullpath;
 }
 
