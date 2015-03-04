@@ -3,70 +3,63 @@
 using namespace std;
 /*
   use stack
-  scan input string
+  scan input string, keep on looking up for '/'
        if meets ./, passby;
-       if meets a ../ pop
+       if meets a ../ pop (make sure stack is not empty)
        if meets other non-/ strings, push
   return string remained in the stack
-
-  /a/./b/../../c/
-  push a
-  pass ./
-  push b
-  pop b
-  pop a
-  push c
-  return /+c
-
+  tip: use string constructor (iterator first, iterator last)
 */
-vector<string> splitPath(const string &path, char delim){
-    istringstream iss(path);
-    string item;
-    vector<string> tokens;
-    while(getline(iss, item, delim)){
-        tokens.push_back(item);
-    }
-    return tokens;
-}
 
 string simplifyPath(string path) {
-    stack<string> s;
-    string result;
-    vector<string> tokens = splitPath(path, '/');
-    for(int i=0; i<tokens.size(); i++){
-        string cur = tokens[i];
-        if(cur != "." && cur != ".." && !cur.empty()) {
-            s.push(cur);
-            continue;
+    if(path.empty()) return "";
+    vector<string> res; // use vector to simulate stack
+    for(auto it=path.begin(); it!=path.end(); ){
+        ++it;// pass by the first leading '/', so now it points a non-/ char
+        auto slash = find(it, path.end(), '/');
+        string dir_name = string(it, slash); // constructed from iterators
+        if(dir_name == ".."){
+            if(!res.empty()) res.pop_back();
+        }else{
+            if(dir_name!="." && !dir_name.empty()) {
+                res.push_back(dir_name);
+            }
         }
-        if(cur == "." || cur.empty()) continue;//  /home//foo
-        if(cur == ".." && !s.empty()){
-            s.pop();
-        }
+        it = slash;
     }
-    stack<string> dirs;
-    while(!s.empty()){
-        dirs.push(s.top());
-        s.pop();
-    }
-    if(dirs.empty()){
-        return string("/");
-    }
-    while(!dirs.empty()){
-        result += string("/") + dirs.top();
-        dirs.pop();
-    }
-    return result;
+    string fullpath("/");
+    for_each(res.begin(), res.end(), [&fullpath](string & s){
+            fullpath += s + string("/");
+        });
+    if(fullpath.length()>2) fullpath.resize(fullpath.length()-1);
+    return fullpath;
+}
+
+TEST(SimplifyPath, I){
+    string path="/a/./b/../../c/";
+    const char * res = "/c";
+    ASSERT_STREQ(res, simplifyPath(path).c_str());
+}
+
+TEST(SimplifyPath, II){
+    string path= "/home//foo";
+    const char * res = "/home/foo";
+    ASSERT_STREQ(res, simplifyPath(path).c_str());
+}
+
+TEST(SimplifyPath, III){
+    string path="/home";
+    const char * res = "/home";
+    ASSERT_STREQ(res, simplifyPath(path).c_str());
+}
+TEST(SimplifyPath, IV){
+    string path="/../";
+    const char * res = "/";
+    ASSERT_STREQ(res, simplifyPath(path).c_str());
 }
 
 int main(int argc, char *argv[]){
-    //testing::InitGoogleTest(&argc, argv);
-    //return RUN_ALL_TESTS();
-    string paths[] = {"/a/./b/../../c/", "/home//foo", "/home/", "/../"};
-    string results[] = {"/c", "/home/foo", "/home", "/"};
-    for(int i=0; i<4; i++){
-        cout<<simplifyPath(paths[i])<<endl;
-    }
-    return 0;
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
 

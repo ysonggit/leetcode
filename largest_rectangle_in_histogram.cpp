@@ -15,7 +15,7 @@ using namespace std;
 
       http://blog.csdn.net/linhuanmars/article/details/20524507
 */
-
+/*
 int largestRectangleArea(vector<int> &height) {
     if(height.size()==0) return 0;
     stack<int> s;
@@ -43,7 +43,37 @@ int largestRectangleArea(vector<int> &height) {
      }
        
     return max_rect; 
-}
+    }*/
+
+/*
+  idea:
+  use two stacks: one saves values, one saves indices
+  6|      __
+  5|    _| |
+  4|   | | |
+  3|   | | |  __
+  2|__ | | |_| |
+  1| |_| |_| | |
+  0|_|_|_|_|_|_|___
+
+  i=0 valuestack push 2,             valuestack: 2,    idxstack:
+
+  i=1 A[1] < valuestack.peek, pop 2, max_area = 2,
+      push A[i] to valuestack,
+      push popped idx 0 to idxstack  valuestack: 1,    idxstack: 0
+
+  i=2 A[2]=5, push 5,               valuestack: 5, 1   idxstack: 0
+
+  i=3 A[3]=6, push 6                valuestack: 6,5,1  idxstack: 0
+
+  i=4 A[4]=2, pop 6  max_area = max(max_area, 3*1, 6*1, 5*2) =10
+              pop 5 max_area = 10
+              push last popped idx 2 to idxstack
+              push 2 to value stack  valuestack: 2,1   idxstack 2,0
+
+  i=5 A[5]=3, push 3 to valuestack valuestack: 3,2,1, idxstack 2,0
+  
+ */
 
 TEST(LargestRectangle, One){
     vector<int> height = {2,1,5,6,2,3};
