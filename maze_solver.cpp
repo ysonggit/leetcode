@@ -11,6 +11,11 @@ using namespace std;
   B###B#
   place a robot at the upper left corner, it can move towards four directions
   write a function to check if there exits a way to the lower right corner
+
+  idea:
+  simpler than word search
+  dfs from upper left corner
+  
  */
 
 bool dfs(vector<vector<char> > & maze, vector<vector<int> > & visited, int x, int y){
