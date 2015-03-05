@@ -111,5 +111,41 @@ void printGraphNode(UndirectedGraphNode * node);
 void printGraph(UndirectedGraphNode * node);
 
 
+/////////////////////////////////////////////////////////
+//         API for Read4  Base Class                   //
+/////////////////////////////////////////////////////////
+
+class ReadAPI{
+public:
+    const char * input;
+    void setInput(const char * p){
+        const size_t len = strlen(p);
+        char * tmp = new char [len+1];
+        //strncpy combats buffer overflow by requiring you to put a length in it.
+        strncpy(tmp, p, len);
+        tmp[len] = '\0';
+        input = tmp;
+    }
+    // return the actual bytes read
+    int read4(char * buffer){
+        int i=0; 
+        while( i<4 && *input != '\0'){
+            /* strcpy terminates when the source string's null terminator is found.
+               memcpy requires a size parameter be passed
+            */
+            memcpy(buffer+i, input++, 1);
+            i++;
+        }
+        return i;
+    }
+    void testRead4(){
+        std::cout<<"Input: "<<input<<std::endl;
+        char * buffer = new char[4];
+        std::cout<<"Test Read4(): "<<read4(buffer)<<" bytes read: \n";
+        std::cout<<buffer<<std::endl;
+    }
+    virtual int read(char * buf, int n) = 0;
+    virtual void testRead(int bytes_to_read, const char * desired_output) = 0;
+};
 
 

@@ -1,6 +1,27 @@
 #include <gtest/gtest.h>
 #include "utils.h"
 using namespace std;
+/*
+   idea : brute-force (DFS)
+   fill spot one by one,
+   first finish one row, then move to next row until the last row
+   given board
+        "..5.....6"
+        "....14..."
+        "........."
+        ".....92.."
+        "5....2..."
+        ".......3."
+        "...54...."
+        "3.....42."
+        "...27.6.."
+   for a spot waiting for a number, try 1..9,
+   (by calling valid sudoku procedure),
+   if the number is ok for current spot, then try next spot
+   otherwise, try another number at this spot
+
+ */
+
 bool isValid(vector<vector<char> > & board, int i, int j){
     for(int k=0; k<9; k++) {
         if(board[i][k]==board[i][j] && k != j) return false; // dup number on same row
