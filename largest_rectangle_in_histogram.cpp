@@ -111,13 +111,11 @@ TEST(LargestRectangle, Seven){
     ASSERT_EQ(res, largestRectangleArea(height));
 }
 
-
 TEST(LargestRectangle, Eight){
     vector<int> height = {1,2,1};
     int res = 3;
     ASSERT_EQ(res, largestRectangleArea(height));
 }
-
 
 int main(int argc, char *argv[]){
     testing::InitGoogleTest(&argc, argv);
