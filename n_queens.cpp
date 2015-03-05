@@ -5,7 +5,7 @@ using namespace std;
   DFS 
      The key to code this question is how to represent queens properly
      1) Use a vector<int> queen to represent the queen's location:
-          queen[i,j] means there is a queen placed in row i, column j
+          queen[i]=j means there is a queen placed in row i, column j
      2) Define a vector<int> columns_occupied :
            represent the columns where queens are placed
  */
