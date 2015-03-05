@@ -9,31 +9,20 @@ using namespace std;
 */
 
 vector<string> anagrams(vector<string> &strs) {
-    vector<string> all_anagrams;
-    if(strs.size()==0) return all_anagrams;
-    unordered_map<string, int> str_count;
-    unordered_map<string, string> str_cache;
-    set<string> duplicated_keys;
-    for(int i=0; i<strs.size(); i++){
-        string key = strs[i];
-        std::sort(key.begin(), key.end() );
-        if(str_count.find(key) == str_count.end()){
-            str_count[key]=1;
-            str_cache[key]=strs[i];
-        }else{
-            str_count[key]++;
-            if(duplicated_keys.find(key) == duplicated_keys.end()){
-                duplicated_keys.insert(key);
-            }
-            all_anagrams.push_back(strs[i]);
-        }
+   vector<string> res;
+  if(strs.empty()) return res;
+  unordered_map<string, vector<string> > anagram_group;
+  for(string s : strs){
+    string key = s;
+    sort(key.begin(), key.end());
+    anagram_group[key].push_back(s);
+  }
+  for(auto it = anagram_group.begin(); it!= anagram_group.end(); ++it){
+    if(it->second.size()>1){
+      res.insert(res.end(), it->second.begin(), it->second.end());
     }
-    // recall that the first time shown anagrams have not been pushed to results yet
-    for(auto iter = duplicated_keys.begin(); iter != duplicated_keys.end(); ++iter){
-        all_anagrams.push_back(str_cache[*iter]);
-    }
-
-    return all_anagrams;
+  }
+  return res;
 }
 
 int main(int argc, char *argv[])
