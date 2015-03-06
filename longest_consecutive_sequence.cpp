@@ -1,4 +1,5 @@
 #include "utils.h"
+#include <gtest/gtest.h>
 
 using namespace  std;
 
@@ -20,8 +21,8 @@ using namespace  std;
 
   Question: duplicates contained?
  */
-
-int longestConsecutive(vector<int> &num) {
+/*
+  int longestConsecutive(vector<int> &num) {
     if(num.size()==0) return 0;
     // use a map of (value, index)
     std::unordered_map<int, int> hash;
@@ -41,7 +42,7 @@ int longestConsecutive(vector<int> &num) {
             hash.erase(next);
             next++;
         }
-        
+
         while(hash.find(prev) != hash.end()){
             cur_length++;
             hash.erase(prev);
@@ -52,6 +53,51 @@ int longestConsecutive(vector<int> &num) {
         }
     }
     return max_length;
+    }*/
+
+/* idea: hash all numbers : key is number, value is its idx in array
+    look up its nearby numbers by +1 and -1
+    alternative version
+*/
+int longestConsecutive(vector<int> &num) {
+    if(num.empty()) return 0;
+    int max_len = 1;
+    unordered_map<int, int> num_idx; 
+    const int n = num.size();
+    vector<int> visited(n, 0);
+    for(int i=0; i<n; i++){
+        num_idx[num[i]] = i;
+    }
+    for(int i= 0; i<n; i++){
+        if(visited[i] > 0) continue;
+        int cur = num[i];
+        visited[i] = 1;
+        int cur_len  = 1;
+        int pre = cur-1;
+        while(num_idx.find(pre) != num_idx.end() ){
+            int pre_idx = num_idx[pre];
+            if(visited[pre_idx]==0){
+                visited[pre_idx] =1;
+                cur_len ++;
+                pre--;
+            }else{
+                break;
+            }
+        }
+        int nex = cur+1;
+        while(num_idx.find(nex) != num_idx.end()){
+            int nex_idx = num_idx[nex];
+            if(visited[nex_idx]==0){
+                cur_len++;
+                visited[num_idx[nex]]=1;
+                nex++;
+            }else{
+                break;
+            }
+        }
+        max_len = max(cur_len, max_len);
+    } 
+    return max_len;
 }
 
 int lisDP(vector<int> & D){
@@ -73,12 +119,13 @@ int lisDP(vector<int> & D){
     return max_length;
 }
 
-int main(){
-    int A[] = {
-        100,4,200,1,3,2
-    };
-    vector<int> num(A, A+sizeof(A)/sizeof(int));
-    cout<<longestConsecutive(num)<<endl;
-    cout<<lisDP(num)<<endl;
-    return 0;
+TEST(test_case, I){
+    vector<int> num{100,4,200,1,3,2};
+    int res = 4;
+    ASSERT_EQ(res, longestConsecutive(num));
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
