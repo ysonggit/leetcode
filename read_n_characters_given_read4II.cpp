@@ -25,6 +25,11 @@ using namespace std;
                     offset = 2
                     bytes_from_buffer = 0
                     bytes_in_buf = 5
+
+    note if keep on calling read(buf, 4),
+    buf will be filled with the chars last saved in buffer
+    (if we want such kind of calls return "", just use a global count
+    , when the count reaches the total size of input, then clear up buffer)
  */
 class Solution : public ReadAPI{
 public:
@@ -60,20 +65,18 @@ public:
         cout<<"read(buf, "<<n<<") ";
         read(buf, n);
         cout<<"Output: "<<buf<<endl;
+        ASSERT_STREQ(desired_output, buf);
         delete [] buf;
         buf = NULL;
-        //ASSERT_STREQ(desired_output, buf);
     }
 
     void testRead(vector<int> bytes){
         cout<<"Input:  "<<input<<endl;
+        string str(input);
         int start = 0;
         for(int i : bytes){
-            char * desired_output = new char [i];
-            //strncpy(desired_output, input+start, i);
+            const char * desired_output = str.substr(start, i).c_str();
             testRead(i, desired_output);
-            delete [] desired_output;
-            desired_output = NULL;
             start += i;
         }
     }
@@ -99,7 +102,7 @@ TEST(test_case, III){
     const char * str = "abcdefghij";
     Solution s;
     s.setInput(str);
-    vector<int> bytes{1,2,3,4, 5};
+    vector<int> bytes{1,2,3,4}; 
     s.testRead(bytes);
 }
 
