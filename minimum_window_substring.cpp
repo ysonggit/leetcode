@@ -4,81 +4,86 @@
 using namespace std;
 
 /*
-  idea: move a sliding window represented as two pointers
-        presteps: create a desired dict (hashmap) of characters in T,
-                  key is the char, and value is the shown times in T
-                  create an actual_dict of chars in S
-     setup a variable to count how many chars of T have been visited in S
-  1. first move back pointer, if current char is contained in T, update actual_dict's value
-                update counter only if the actual_dict's value <= dest dict's value
-  2. if the count == T's length
-        move front pointer while deduct corresponding value in actual dict, until the actual_dict[S[front]] is equal to destdict[S[front]]
-        record current minimum length and save current front pointer
-  4. return step 1 until to the tail of S
-  Question : how about T contains duplicated characters?
-  answer: use two dicts : dest dict and actual dict 
- */
+  idea :
+  1 two pointers maintain a sliding window
+  2 use a count to control, if count = T.length, move left pointer
+  example S="acbbaca", T="aba"
+  build a dictionary for T, call it need_find[256]
+  so that need_find['a']=2 need_find['b']=1
+  maintains a dictionary for S, call it has_found[256]
 
+  initially left = 0, right=0
+  move right, until has_found['a']=2, has_found['b']=2
+  update count iff has_found[x] < need_find[x]
+  a window is found as "acbba", update min_len = 5
+
+  keep on moving right till reach the end, so has_found['a']=3
+  move left to decrease has_found['a'] to 2
+  then another window can be obtained "baca" with min_len=4
+
+  corner case: if S does not contain such a window for T, return ?
+*/
 string minWindow(string S, string T){
-    int n = S.length(), m = T.length();
-    if (n < m) return string("");
-    // create dest dict of T
-    vector<int> dest_dict(128, 0);
-    vector<int> actual_dict(dest_dict);
-    for(char t: T){
-        int idx = (int)(unsigned char)t;
-        dest_dict[idx]++;
-    }
-    int front = 0, count =0;
-    int min_len = n+1, min_start = front;
-    for(int back=0; back<n; back++){
-        // move back pointer i
-        int b_idx = (int)(unsigned char)S[back];
-        if(dest_dict[b_idx] != 0){
-            actual_dict[b_idx]++;
-            if(actual_dict[b_idx]<= dest_dict[b_idx]) count++;
-            while(count == m){
-                // current window contains all chars in T
-                // now move front pointer
-                int f_idx = (int)(unsigned char)S[front];
-                if(dest_dict[f_idx]==0){
-                    front++;
+    int s = S.length(), t = T.length();
+    if (s<t) return string("");
+    vector<int> has_found(256, 0);
+    vector<int> need_find(256,0);
+    for(char c : T){ need_find[(int)c]++; }
+    int count = 0;
+    int min_len = s+1;
+    int start_idx_with_min_len = -1;
+    for(int left =0, right = 0; right < s; right++){
+        // update count and has_found
+        char cur = S[right];
+        if(need_find[cur] == 0 ) continue;
+        if(has_found[cur]<need_find[cur]) count++;
+        has_found[cur]++;
+        // trace count to determine when the window is found
+        while(count == t){
+            // move left
+            // 1 S[left] is not in need_find, then just pass by
+            if(need_find[S[left]] == 0){
+                left++;
+            }
+            // 2 S[left] is in need_find , decrease has_found[S[left]] by 1
+            else if(has_found[S[left]] > need_find[S[left]]) {
+                has_found[S[left]] --;
+                left++;
+            }else{
+                // update start_idx_with_min_len
+                if(min_len > right - left+1 ){
+                    min_len = right-left+1;
+                    start_idx_with_min_len = left;
                 }
-                else if (actual_dict[f_idx]>dest_dict[f_idx]){
-                    actual_dict[f_idx]--;
-                    front++;
-                }else{
-                    // tricky: use min_len = min(min_len, back-front+1);
-                    //             min_start = front;
-                    //    is wrong because min_start is not correctly updated
-                    if(min_len > back-front+1){
-                        min_start = front;
-                        min_len = back-front+1;
-                    }
-                    break;
-                }
-
+                break;
             }
         }
     }
-    if(min_len > n) return string("");
-    return S.substr(min_start, min_len);
+    // corner case
+    if(min_len>s) return string("");
+    return S.substr(start_idx_with_min_len, min_len);
 }
 
-TEST(MinWindow, One){
-    string S("FADABEDCODEBANC");
-    string T("ABC");
-    string res("BANC");
-    const char * r = res.c_str();
+TEST(MinWindow, I){
+    string S("acbbaca");
+    string T("aba");
+    const char * r = "baca";
     const char * m = minWindow(S, T).c_str();
     ASSERT_STREQ(r, m);
 }
 
-TEST(MinWindow, Two){
+TEST(MinWindow, II){
+    string S("FADABEDCODEBANC");
+    string T("ABC");
+    const char * r = "BANC";
+    const char * m = minWindow(S, T).c_str();
+    ASSERT_STREQ(r, m);
+}
+
+TEST(MinWindow, III){
     string S("cabwefgewcwaefgcf");
     string T("cae");
-    string res("cwae");
-    const char * r = res.c_str();
+    const char * r = "cwae";
     const char * m = minWindow(S, T).c_str();
     ASSERT_STREQ(r, m);
 }
