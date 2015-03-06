@@ -31,6 +31,8 @@ public:
         read(buf, n);
         cout<<"Output: "<<buf<<endl;
         ASSERT_STREQ(desired_output, buf);
+        delete [] buf;
+        buf = NULL;
     }
 };
 
