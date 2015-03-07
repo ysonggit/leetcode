@@ -31,18 +31,19 @@ output: []
 vector<string> splitString(string s){
     if(s.empty()) return vector<string>{};
     vector<string> res;
+    s.push_back(' ');
     int n = s.length();
     int i = 0;
     int start_pos = 0, end_pos = 0;
     bool single_quote_found = false;
     while(i<n){
-        if(s[i] == ' ' || i==n-1){
+        if(s[i] == ' '){
             end_pos = i;
-            int len = (i==n-1) ? end_pos - start_pos + 1 : end_pos - start_pos;
+            int len = end_pos - start_pos;
             i++;
             while(s[i]==' ') i++;
             if(!single_quote_found){
-                res.push_back(s.substr(start_pos, len));
+                if(len>0) res.push_back(s.substr(start_pos, len));
                 start_pos = i;
             }
         }
@@ -89,6 +90,17 @@ TEST(Split, VII){
     string s("a    b   ");
     printVector(splitString(s));
 }
+
+TEST(Split, VIII){
+    string s("    a    b");
+    printVector(splitString(s));
+}
+
+TEST(Split, IX){
+    string s("a");
+    printVector(splitString(s));
+}
+
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
