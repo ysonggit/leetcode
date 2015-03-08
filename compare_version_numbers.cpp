@@ -1,103 +1,105 @@
 #include "utils.h"
+#include <gtest/gtest.h>
 
 using namespace std;
 /*
   question overflow? YES: see"0.9.9.9.9.9.9.9.9.9.9"
   illegal input checking? for example: many dots 32...243?
-  Can not convert string to integer for, exampe, "1.1"<"1.10"
+  Can not convert string to integer for, example, "1.1"<"1.10"
 
   idea:
-  put each non-dot toke into a list of strings
-  compare the most important bit (the first bit where two numbers are different)
+  given two versions
+  00.1
+  0.0.1
+  find the number of dots, if not equal, append dots to make them equal
+  such that
+  00.1 becomes 00.1.0
+
+  then convert two versions to long long type (in case of overflow)
+  the idea is like splitting string
+  so that 00.1.0 => 10
+  0.0.1 => 1
+  
 */ 
-struct Version{
-    Version(vector<string> n, int v): num(n), valid(v){ }
-    vector<string> num;
-    bool valid;
-    inline int length() {return num.size();}
-    void appendZeros(int k){
-        for(int i=0; i<k; i++){
-            num.push_back(string("0"));
-        }
-    }
-};
-
-Version convertStr(string vs){
-    bool v=true;
-    vector<string> n;
-    if(vs.empty()) {v = false;}
-    for(int i=0; i<vs.length()-1; i++){
-        if(vs[i]=='.' && vs[i+1]=='.'){
-            v = false;
-        }
-    }
-    char * dup = strdup(vs.c_str());
-    char * token = std::strtok(dup, ".");
-    while(token != NULL){
-        //cout<<token<<endl;
-        int tmp = stoi(string(token)); // 01 -> 1
-        string s = std::to_string(tmp);
-        n.push_back(s);
-        // http://en.cppreference.com/w/cpp/string/byte/strtok
-        // If str == NULL, the call is treated as a subsequent calls to strtok:
-        // the function continues from where it left in previous invocation.
-        // The behavior is the same as if the previously stored pointer is passed as str. 
-        token = std::strtok(NULL, ".");
-    }
-    // free dup
-    free(dup);
-    return Version(n, v);
-}
-
-ostream & operator << (ostream & lhs, const Version & v){
-    lhs << "Version \n";
-    for(int i=0; i< v.num.size()-1; i++){
-        lhs << v.num[i] << "." ;
-    }
-    lhs << v.num.back() << "\n";
-    return lhs;
-}
-
-
-int compareVersion(string version1, string version2) {
-    Version v1 = convertStr(version1);
-    Version v2 = convertStr(version2);
-    if(v1.valid && v2.valid){
-        //cout<<v1<<v2<<endl;
-        if(v1.length()> v2.length()){
-            v2.appendZeros(v1.length()-v2.length());
+long long versionToLong(string version){
+    int i=0;
+    long long v = 0;
+    version.push_back('.');
+    int start_pos = 0, end_pos = 0;
+    while(i<version.length()){
+        if(version[i]=='.'){
+            end_pos = i;
+            i++;
+            int cur = stoi(version.substr(start_pos, end_pos-start_pos));
+            start_pos = i;// this bit should not be .
+            v = v* 10 + cur;
         }else{
-            v1.appendZeros(v2.length()-v1.length());
+            i++;
+            continue;
         }
-        int most_important_bit = -1;
-        for(int i=0; i<v1.num.size(); i++){
-            if(!(v1.num[i] == v2.num[i])){
-                most_important_bit = i;
-                break;
-            }
-        }
-        if(most_important_bit < 0) return 0;
-        if(stoi(v1.num[most_important_bit]) > stoi(v2.num[most_important_bit])) return 1;
-        if(stoi(v1.num[most_important_bit]) < stoi(v2.num[most_important_bit])) return -1;
     }
+    return v;
+}
+
+int numberOfDots(string ver){
+    int n =0;
+    for_each(ver.begin(), ver.end(), [&n](char c){ 
+            if(c=='.') n++; 
+        });
+    return n;
+}
+int compareVersion(string version1, string version2) {
+    int num_dots_v1 = numberOfDots(version1);
+    int num_dots_v2 = numberOfDots(version2);
+    int diff = abs(num_dots_v1 - num_dots_v2);
+    if(num_dots_v1 > num_dots_v2){
+        for(int i= 0; i<diff; i++){
+            version2 += string(".0");
+        }
+    }
+    if(num_dots_v1 < num_dots_v2){
+        for(int i= 0; i<diff; i++){
+            version1 += string(".0");
+        }
+    }
+    long long v1 = versionToLong(version1);
+    long long v2 = versionToLong(version2);
+    if(v1>v2) return 1;
+    if(v1<v2) return -1;
     return 0;
 }
 
-void test(string v1, string v2, int expectation){
-    if(compareVersion(v1, v2)== expectation){
-        cout<<"Correct output!"<<endl;
-    }else{
-        cout<<"Wrong output!"<<endl;
-    }
+TEST(Case, I){
+    string v1 = "01";
+    string v2 = "1";
+    int res = 0;
+    ASSERT_EQ(res, compareVersion(v1, v2));
 }
 
-int main(int argc, char *argv[]){
-    string vs[] = {"01", "1", "1", "0", "1.0", "1.1", "0.1", "0.0.1", "0.9.9.9.9.9.9.9.9.9.9.9.9", "1.0", "1.1", "1.10"};
-    int exps[] = {0, 1, -1, 1, -1, -1};
-    int n= getArrayLength(exps);
-    for(int i=0; i<n; i++){
-        test(vs[i*2], vs[i*2+1], exps[i]);
-    }
-    return 0;
+
+TEST(Case, II){
+    string v1 = "0.0.1";
+    string v2 = "0.1";
+    int res = -1;
+    ASSERT_EQ(res, compareVersion(v1, v2));
+}
+
+TEST(Case, III){
+    string v1 = "1.1";
+    string v2 = "1.10";
+    int res = -1;
+    ASSERT_EQ(res, compareVersion(v1, v2));
+}
+
+TEST(Case, IV){
+    string v1 = "1.0";
+    string v2 = "0.9.9.9.9.9.9.9.9.9.9.9.9";
+    int res = 1;
+    ASSERT_EQ(res, compareVersion(v1, v2));
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
 
