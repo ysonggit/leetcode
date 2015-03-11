@@ -39,16 +39,45 @@ using namespace std;
   &01010101
   ----------
    01000101
-  
+
   = 01 00 01 10 ==> means : for the original n = 10001011
-   ---|--|--|-- --> there are 10(2) ONEs in the leftmost two bits
+   ---|--|--|--
+    |  |  |  |_ there are 10(2) ONEs in the leftmost two bits
+    |  |  |
     |  |  |_ there is 01(1) ONE in these two bits
-    |  |  
+    |  |
     |  |_ there is 00 ONE in these two bits
-    |  
+    |
     |_ there is 01 (1) ONE in the rightmost 2 bits
-    
-   
+
+  01000110
+ &00110011
+ ----------
+  00000010
+ +
+  00010001
+ &00110011
+ ----------
+  00010001
+
+ =
+  0001 0011
+  ----|----
+   |    |_ there are 0011(3) ONEs in the leftmost four bits
+   |
+   |_ there is 0001(1) ONE in the rightmost four bits
+
+  00010011
+ &00001111
+ ---------
+  00000011
+ +
+  00000001
+ &00001111
+ ---------
+  00000001
+ =
+  00000100 ==> there are 00000100(4) ONEs in the original number n 
 */
 const uint32_t m1 = 0x55555555; //0101 ...
 const uint32_t m2 = 0x33333333; //0011 ...
