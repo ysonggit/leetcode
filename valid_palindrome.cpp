@@ -5,23 +5,15 @@ using namespace std;
 /*
   idea : two pointers, skip any non alphabetic or decimal digit characters
   O(n) time O(1) space
- */
-
-bool isPalindrome(string s){
-    int n= s.length();
-    if(n==0) return true;
-    int front = 0, back = n-1;
-    transform(s.begin(), s.end(), s.begin(), ::tolower);
+*/
+bool isPalindrome(string s) {
+    if(s.empty()) return true;
+    int front = 0; int back= s.length()-1;
+    transform (s.begin(), s.end(), s.begin(), ::tolower);
     while(front<back){
-        if(!isalnum(s[front]) ){
-            front++;
-            continue;
-        }
-        if(!isalnum(s[back])){
-            back--;
-            continue;
-        }
-        if(s[front] == s[back]){
+        while(front<back && !isalnum(s[front])) front++;
+        while(front<back && !isalnum(s[back])) back--;
+        if(s[front]==s[back]){
             front++;
             back--;
         }else{
