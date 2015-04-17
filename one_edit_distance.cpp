@@ -15,40 +15,21 @@ using namespace std;
 */
 
 bool isOneEditDistance(string s, string t) {
-    if(s.empty() && t.empty()) return false;
-    int m = s.length(), n = t.length();
-    if(abs(m-n)> 1) return false;
-    if(m==n){
-        // sequentially compare each character in s and t respectively (linear forward search),
-        // find the different one(s), if there exits the only one character that is different in two strings
-        // return true, otherwise, false
-        int count = 0;
-        for(int i=0; i<m; i++){
-            if(s[i]==t[i]){
-                count++;
-            }
-        }
-        if(m-count==1) return true;
-        return false;
+  if(s==t) return false;
+  int m = s.length(), n = t.length();
+  if(abs(m-n)>1) return false;
+  if(m > n) return isOneEditDistance(t, s);
+  for (int i=0; i<m; i++){
+    char sc = s[i], tc = t[i];
+    if(sc != tc){
+        if(m<n) return s.substr(i) == t.substr(i+1);
+        else{
+          if(i<m-1) return s.substr(i+1) == t.substr(i+1);
+          else return true;
+         }
     }
-    // check if insertion or deletion makes two strings equal
-    // idea: for each character in the longer string
-    //           delete it and compare with the shorter one
-    //           if substr is equal to the shorter
-    //               return true
-    // s = abcdefg
-    // t = abcddefg
-    string longer = (m>n) ? s : t;
-    string shorter = (m>n) ? t : s;
-    for(int pos=0; pos<longer.length(); pos++){
-        //1. save a copy of char at pos
-        char c = longer[pos];
-        //2. remove this char 
-        longer.erase(pos, 1);
-        if(longer==shorter) return true;
-        longer.insert(pos, 1, c);
-    }
-    return false;
+  }
+  return true;// mistake : s = "", t = "a"
 }
 
 TEST(OneEditDistance, One){
