@@ -9,48 +9,35 @@ using namespace std;
   3. join 3 seperate lists
       
  */
-
-// return reversed head
-ListNode * reverseNodes(ListNode * cur){
-    ListNode * pre = NULL;
-    ListNode * nex_cp;
-    while(cur!= NULL){
-        nex_cp = cur->next;
-        cur->next = pre;
-        pre = cur;
-        cur = nex_cp;
-    }
-    ListNode * rev_head = pre;
-    return rev_head;
-}
-
+ 
+ 
 ListNode *reverseBetween(ListNode *head, int m, int n) {
-    if(head==NULL || head->next == NULL ) return head;
-    ListNode * fakehead = new ListNode(-1);
-    fakehead->next = head;
-    ListNode * pre = fakehead;
-    ListNode * cur = head;
-    // 1. find m node
-    for(int i=1; i<m; i++){
-        pre= pre->next;
-        cur= cur->next;
-    }
-    pre->next = NULL;
-    ListNode * node_m = cur;
-    // 2. reverse till n^th node
-    int times = n-m; // need n-m reverses
-    for(int j=0; j<n-m; j++){
-        cur = cur->next;
-    }
-    ListNode* post = cur->next; 
-    cur->next = NULL;    
-    ListNode * rev = reverseNodes(node_m);
-    // 3. re-join three parts
-    pre->next = rev;
-    node_m->next = post;
-    return fakehead->next;
+  if(head==NULL) return NULL;
+  if(m==n) return head;
+  ListNode * dummy = new ListNode(-1);
+  dummy->next = head;
+  ListNode * cur = dummy->next;
+  ListNode * pre = dummy;
+  for(int i=1; i<m; i++){
+    pre = pre->next;
+    cur = cur->next;
+  }
+  pre->next = NULL;
+  ListNode * rev_start = cur;
+  ListNode * rev_pre = NULL;
+  ListNode * rev_end = cur;
+  int k = n-m+1;// watch out!
+  while(k>0){
+      ListNode * rev_nex = rev_start->next;
+      rev_start->next = rev_pre;
+      rev_pre = rev_start;
+      rev_start =rev_nex;
+      k--;
+  }
+  pre->next = rev_pre;
+  rev_end->next = rev_start;
+  return dummy->next;
 }
-
 
 int main(int argc, char *argv[]){
     vector<ListNode*> nodes1;
