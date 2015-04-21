@@ -37,7 +37,6 @@ int pickWinner(int n, int k){
     }
     return ids.front();
 }
-*/
 
 int pickWinner(int n, int k){
     if(n==0) return -1;
@@ -48,17 +47,44 @@ int pickWinner(int n, int k){
     int start_pos = 0;
     auto to_remove = ids.begin();
     while(ids.size()>1){
-        int offset = k % (ids.size())-1;
+        int offset = k % (ids.size())-1; //mistake : k not n!
         if(offset < 0){
             offset = ids.size()-1;
         }
-        advance(to_remove, (start_pos+offset)%ids.size());
+        advance(to_remove, (start_pos+offset)%ids.size()); 
         start_pos = distance(ids.begin(), to_remove);
         //cout<<"start pos now is "<<start_pos<<endl;
         ids.erase(to_remove);
-        to_remove = ids.begin();
+        to_remove = ids.begin(); // mistake : forgot to reset
     }
     return *ids.begin();
+    }*/
+
+int pickWinner(int n, int k){
+    if(n==0) return -1;
+    ListNode * head = new ListNode(1);
+    ListNode * cur = head;
+    for(int i=2; i<=n; i++){
+        cur->next = new ListNode(i);
+        cur = cur->next;
+    }
+    ListNode * pre = cur;
+    cur->next = head;
+    int rest = n;
+    while(rest>1){
+        int steps = k%(rest);
+        ListNode * to_leave = head;
+        for(int i=1; i<k; i++){
+            pre = pre->next;
+            to_leave = to_leave->next;
+        }
+        pre->next = to_leave->next;
+        head = pre->next;
+        rest--;
+        delete to_leave;
+        to_leave = NULL;
+    }
+    return head->val;
 }
 
 TEST(Winner, I){
