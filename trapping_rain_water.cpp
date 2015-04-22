@@ -67,7 +67,6 @@ int trap(int A[], int n) {
   i=10, pop stack, maxVol = 6, push 10, stack : 10, 8, 7
   i=11, push 11
   done
- */
 
 int trap(int A[], int n){
     if(A==NULL || n<=1) return 0;
@@ -89,6 +88,26 @@ int trap(int A[], int n){
         bars_left.push(i);
     }
     return max_volume;
+}*/
+int trap(vector<int>& heights) {
+      int n = heights.size();
+      if(n<2) return 0;
+      vector<int> maxleftbars(n, 0);// maxleftbars[i]: the max bar on the left side of pos i
+      vector<int> maxrightbars(n, 0); // maxrightbars[i]: the max bar on the right side of pos i
+      for(int i=1; i<n; i++){
+            maxleftbars[i] = max(maxleftbars[i-1], heights[i-1]); // mistake : heights[i]
+      }
+      for(int i=n-2; i>=0; i--){
+            maxrightbars[i] = max(maxrightbars[i+1], heights[i+1]); // mistake : heights[i]
+      }
+      int vol = 0;
+      for(int i=0; i<n; i++){
+            int cur_bar = heights[i];
+            int min_bar = min(maxleftbars[i], maxrightbars[i]);
+            if(cur_bar >= min_bar) continue;
+            vol += (min_bar - cur_bar);
+      }
+      return vol;
 }
 
 TEST(TrappingWater, One){
