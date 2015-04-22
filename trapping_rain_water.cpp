@@ -111,15 +111,15 @@ int trap(vector<int>& heights) {
 }
 
 TEST(TrappingWater, One){
-    int A[]={0,1,0,2,1,0,1,3,2,1,2,1};
+    vector<int> heights{0,1,0,2,1,0,1,3,2,1,2,1};
     int res = 6;
-    ASSERT_EQ(res, trap(A, 12));
+    ASSERT_EQ(res, trap(heights));
 }
 
 TEST(TrappingWater, Two){
-    int A[]={2,0,2};
+    vector<int> heights{2,0,2};
     int res = 2;
-    ASSERT_EQ(res, trap(A, 3));
+    ASSERT_EQ(res, trap(heights));
 }
 
 int main(int argc, char *argv[]){
