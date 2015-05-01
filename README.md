@@ -1,7 +1,6 @@
 leetcode solutions
 ========
 
-Reference : http://okckd.github.io/blog/categories/leetcode/ 
 
 Note: CMake and google test library are required
 
