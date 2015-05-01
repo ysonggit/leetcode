@@ -5,6 +5,7 @@ using namespace std;
    the weight of a tree = sum of weight of all node in the tree.
    Weight of node  = value of node * level of the node in the tree
    source : mitbbs
+   http://www.mitbbs.com/article_t/JobHunting/32950115.html
  */
 
 void getNodesWeights(TreeNode * root,  unordered_map<TreeNode*, int> & nodes_weights){
