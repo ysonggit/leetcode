@@ -92,13 +92,57 @@ void treeInitializer(std::vector<TreeNode *> & nodes, const std::string & vals){
     }
 }
 
+/*
 void printTree(TreeNode * root, int indent){
     if(root!=NULL){
         printTree(root->right, indent+4);
         std::cout <<setw(indent)<< root->val <<std::endl;
         printTree(root->left, indent+4);
     }
+    }*/
+int getTreeHeight(TreeNode * root){
+    if(root == NULL) return 0;
+    return 1 + max(getTreeHeight(root->left), getTreeHeight(root->right));
 }
+
+void printTree(TreeNode * root, int spaces=3){
+    if(root == NULL) return;
+    int height = getTreeHeight(root);
+    int level = 1; // the root is at the first level
+    int curr_level = 1, next_level = 0;
+    // int padding = space * (pow(2, height-level)-1);
+    queue<TreeNode*> Q;
+    Q.push(root);
+    int padding = spaces * (pow(2, height-level)-1);
+    cout<<setw(padding/2)<<"";
+    while(level<=height){ // don't use !Q.empty() 
+        TreeNode * cur = Q.front();
+        Q.pop();
+        curr_level--;
+        cout<<setw(spaces);
+        if(cur != NULL){
+            cout<<cur->val;
+            Q.push(cur->left);
+            Q.push(cur->right);
+        }else{
+            cout<<" ";
+            Q.push(NULL);
+            Q.push(NULL);
+        }
+        next_level+= 2;
+        cout<<setw(padding)<<"";
+        if(curr_level==0){
+            //cout<<"level "<<level<<", padding = "<<padding<<endl;
+            curr_level = next_level;
+            next_level = 0;
+            level++;
+            padding = spaces * (pow(2, height-level)-1);
+            // update padding (narrow)
+            cout<<endl<< setw(padding/2)<<"";
+        }
+    }
+}
+
 
 ostream & operator<<(ostream & lhs, const Interval & it){
     lhs << "[" << it.start << ", " << it.end << "]\n";

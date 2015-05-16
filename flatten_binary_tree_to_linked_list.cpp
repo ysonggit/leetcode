@@ -53,6 +53,7 @@ void flatten(TreeNode *root) {
     }
 }
 */
+
 TreeNode * helper(TreeNode *& root){
     if(root == NULL) return NULL;
     TreeNode * left = helper(root->left);
@@ -69,14 +70,15 @@ void flatten(TreeNode *root){
     helper(root);
 }
 
+
 TEST(Flatten, I){
     vector<TreeNode*> nodes;
     string vals = "{1,2,5,3,4,#,6}";
     treeInitializer(nodes, vals);
-    printTree(nodes[0], 2);
+    printTree(nodes[0], 3);
     flatten(nodes[0]);
     cout<<"========== Flatten Binary Tree =========="<<endl;
-    printTree(nodes[0], 2);
+    printTree(nodes[0], 3);
 }
 
 
