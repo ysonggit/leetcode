@@ -14,23 +14,22 @@ using namespace std;
                return substitution makes two string equal?
 */
 
-bool isOneEditDistance(string s, string t) {
-  if(s==t) return false;
-  int m = s.length(), n = t.length();
-  if(abs(m-n)>1) return false;
-  if(m > n) return isOneEditDistance(t, s);
-  for (int i=0; i<m; i++){
-    char sc = s[i], tc = t[i];
-    if(sc != tc){
-        if(m<n) return s.substr(i) == t.substr(i+1);
-        else{
-          if(i<m-1) return s.substr(i+1) == t.substr(i+1);
-          else return true;
-         }
+class Solution {
+public:
+    bool isOneEditDistance(string s, string t) {
+        int m = s.length(), n = t.length();
+        if(s==t) return false;
+        if(m>n) return isOneEditDistance(t, s);
+        if(n-m>1) return false;
+        for(int i=0; i<m; i++){
+            if(s[i]!= t[i]){
+                if(m==n) return s.substr(i+1) == t.substr(i+1);
+                else return s.substr(i) == t.substr(i+1);
+            }
+        }
+        return true; // mistake s="" t="a"
     }
-  }
-  return true;// mistake : s = "", t = "a"
-}
+};
 
 TEST(OneEditDistance, One){
     string s("abcdefg");
