@@ -1,4 +1,6 @@
 #include "utils.h"
+#include <gtest/gtest.h>
+
 using namespace std;
 bool containsNearbyDuplicate(vector<int>& nums, int k) {
   unordered_map<int, int>  records; // nums[index] -> index of its last occurence;
@@ -9,4 +11,9 @@ bool containsNearbyDuplicate(vector<int>& nums, int k) {
     records[nums[i]] = i;
   }
   return false;
+}
+
+int main(int argc, char *argv[]){
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

@@ -24,6 +24,7 @@ using namespace std;
               cog
 
 */
+/*
 typedef unordered_map<string, unordered_set<string> > WordTree;
 
 void printWordTree(const WordTree & word_tree){
@@ -125,7 +126,77 @@ vector<vector<string>> findLadders(string start, string end, unordered_set<strin
     ladder.push_back(start);
     dfs(paths, ladder, visited, start, word_tree, end, steps);
     return paths;
+    }*/
+unordered_map<string, unordered_set<string> > wordTree;
+
+void dfs(vector<vector<string>> & res, vector<string>& path, string cur, string end){
+  if(path.back()==end){
+    res.push_back(path);
+    return;
+  }
+  for(auto next : wordTree[cur]){
+    cout<<"\t\t\t\t\t next = "<<next<<endl;
+    path.push_back(next);
+    dfs(res, path, next, end);
+    path.pop_back();
+  }
 }
+vector<vector<string>> findLadders(string beginWord, string endWord, unordered_set<string> &wordList) {
+  unordered_set<string> visited;
+  queue<string> Q;
+  Q.push(beginWord);
+  visited.insert(beginWord);
+  int len = 1;
+  bool shortest_len_found = false;
+  while(!Q.empty()){
+    int cur_level = Q.size();
+    for(int k=0; k<cur_level; k++){
+      auto key_wd = Q.front();
+      Q.pop();
+      if(wordTree.find(key_wd) == wordTree.end()){
+        wordTree[key_wd] = unordered_set<string>{};
+      }
+      string wd = key_wd;
+      for(int i=0; i<wd.length(); i++){
+        char orig = wd[i];
+        for(char c = 'a'; c<='z'; c++){
+          if(c==orig) continue;
+          wd[i] = c;
+          if(visited.find(wd)!= visited.end()){
+             continue;
+          }
+          if(wd == endWord && !shortest_len_found) {
+            len++;
+            shortest_len_found = true;
+          }
+          if(wordList.find(wd)!= wordList.end()){
+            // update wordTree item
+            if(wordTree[key_wd].find(wd)==wordTree[key_wd].end())
+              wordTree[key_wd].insert(wd);
+            visited.insert(wd);
+            Q.push(wd);
+          }
+        }
+        wd[i] = orig;
+      }
+    }
+    len++;
+  }
+  vector<vector<string> > res;
+  if(!shortest_len_found) return res;
+  vector<string> path{beginWord};
+
+  for(auto iter= wordTree.begin(); iter!= wordTree.end(); ++iter){
+    cout<<iter->first<<" : \n";
+    cout<<"------------------\n";
+    for(auto wd : iter->second){
+      cout<<"\t "<<wd<<endl;
+    }
+  }
+  dfs(res, path, beginWord, endWord);
+  return res;
+}
+
 
 TEST(LADDER, I){
     string start("hit");
@@ -151,12 +222,20 @@ TEST(LADDER, III){
     print2DVector(results);
 }
 
-TEST(LADDER, IV){
-    string start("qa");
-    string end("sq");
-    unordered_set<string> dict= {"si","go","se","cm","so","ph","mt","db","mb","sb","kr","ln","tm","le","av","sm","ar","ci","ca","br","ti","ba","to","ra","fa","yo","ow","sn","ya","cr","po","fe","ho","ma","re","or","rn","au","ur","rh","sr","tc","lt","lo","as","fr","nb","yb","if","pb","ge","th","pm","rb","sh","co","ga","li","ha","hz","no","bi","di","hi","qa","pi","os","uh","wm","an","me","mo","na","la","st","er","sc","ne","mn","mi","am","ex","pt","io","be","fm","ta","tb","ni","mr","pa","he","lr","sq","ye"};
-    vector<vector<string> >results = findLadders(start, end, dict);
-    print2DVector(results);
+// TEST(LADDER, IV){
+//     string start("qa");
+//     string end("sq");
+//     unordered_set<string> dict= {"si","go","se","cm","so","ph","mt","db","mb","sb","kr","ln","tm","le","av","sm","ar","ci","ca","br","ti","ba","to","ra","fa","yo","ow","sn","ya","cr","po","fe","ho","ma","re","or","rn","au","ur","rh","sr","tc","lt","lo","as","fr","nb","yb","if","pb","ge","th","pm","rb","sh","co","ga","li","ha","hz","no","bi","di","hi","qa","pi","os","uh","wm","an","me","mo","na","la","st","er","sc","ne","mn","mi","am","ex","pt","io","be","fm","ta","tb","ni","mr","pa","he","lr","sq","ye"};
+//     vector<vector<string> >results = findLadders(start, end, dict);
+//     print2DVector(results);
+// }
+
+TEST(LADDER, V){
+  string start="hot";
+  string end="dog";
+  unordered_set<string> dict={"hot","cog","dog","tot","hog","hop","pot","dot"};
+  vector<vector<string> >results = findLadders(start, end, dict);
+  print2DVector(results);
 }
 
 int main(int argc, char *argv[]){
